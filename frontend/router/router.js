@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import Dashboard from '../src/views/Dashboard';
 
 Vue.use(VueRouter);
 
