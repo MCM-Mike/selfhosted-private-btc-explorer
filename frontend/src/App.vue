@@ -1,18 +1,19 @@
 <template>
-  <v-app class="grey">
-    <NavBar />
-    <v-main>
+  <div>
+    <nav-bar />
+    <main class="w-11/12 md:w-3/4 mx-auto mt-3">
       <router-view />
-    </v-main>
-    <Footer />
-  </v-app>
+    </main>
+  </div>
 </template>
 
 <script>
+import NavBar from "@/components/NavBar";
 export default {
   name: 'App',
 
   components: {
+    NavBar
   },
 
   data: () => ({
@@ -38,6 +39,7 @@ html {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
+  @apply bg-gray-200;
 }
 
 *,
