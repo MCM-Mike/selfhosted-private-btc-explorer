@@ -52,6 +52,28 @@ class BitcoinClient {
 
     return block
   }
+
+  async getBlockHash(index) {
+    const dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getblockhash","params":[${index}]}`
+    const options = {
+      url: URL,
+      method: 'POST',
+      headers,
+      data: dataString
+    }
+
+    let blockHash = '';
+
+    try {
+      const response = await axios(options)
+      checkStatus200(response)
+      blockHash = response.data.result
+    } catch (error) {
+      console.error(error)
+    }
+
+    return blockHash
+  }
 }
 
 function checkStatus200(response) {
