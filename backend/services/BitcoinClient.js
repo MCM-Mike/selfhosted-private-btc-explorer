@@ -93,6 +93,28 @@ class BitcoinClient {
 
     return blockHash
   }
+
+  async getMempoolInfo() {
+    const dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getmempoolinfo","params":[]}`
+    const options = {
+      url: URL,
+      method: 'POST',
+      headers,
+      data: dataString
+    }
+
+    let mempoolInfo;
+
+    try {
+      const response = await axios(options)
+      checkStatus200(response)
+      mempoolInfo = response.data.result
+    } catch (error) {
+      console.error(error)
+    }
+
+    return mempoolInfo
+  }
 }
 
 function checkStatus200(response) {
