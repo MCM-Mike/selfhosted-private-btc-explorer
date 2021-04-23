@@ -7,14 +7,6 @@ const io = require('socket.io')(PORT, {
   }
 })
 
-require('./test/Test_BitcoinClient')
 require('./socket')(io)
 
 console.log(`Running on port: ${PORT}`)
-
-/*
-// Since we are a serverMiddleware, we have to return a handler, even if this it does nothing
-export default function (req, res, next) {
-  next()
-}
-*/

@@ -1,71 +1,70 @@
-const assert = require('assert');
-const BitcoinClient = require("../services/BitcoinClient");
+require('dotenv').config()
+const assert = require('assert')
+const BitcoinClient = require("../services/BitcoinClient")
 
-const bitcoinClient = new BitcoinClient();
+const bitcoinClient = new BitcoinClient()
 
-async function Test_NodeConnection_BlockCount() {
-    const blockCount = await bitcoinClient.getBlockCount()
 
-    console.log('Node block height:', blockCount)
+describe('Test_BitcoinClient', function () {
+    describe('Test_NodeConnection_BlockCount', function () {
+        it('should return blockCount that is not 0', async function () {
+            const blockCount = await bitcoinClient.getBlockCount()
 
-    assert(blockCount > 0)
-}
+            console.log('Node block height:', blockCount)
 
-async function Test_GetBlock_Hash_Block() {
-    // hash of block 1
-    const hash = '00000000839a8e6886ab5951d76f411475428afc90947ee320161bbf18eb6048'
+            assert.ok(blockCount > 0)
+        });
+    })
 
-    // merkleroot of block 1
-    const merkleroot = '0e3e2357e806b6cdb1f70b54c3a3a17b6714ee1f0e68bebb44a74b1efd512098'
+    describe('Test_GetBlock_Hash_Block', function () {
+        it('should return block with height 432088', async function () {
+            // hash of block 1
+            const hash = '0000000000000000012b1980e0117bd95412f8d0a9235731edd9b9729beb36b5'
 
-    // get block using hash of block index 1
-    const block = await bitcoinClient.getBlock(hash)
+            // merkleroot of block 1
+            const height = 432088
 
-    console.log('Block 1 merkleroot:', block.merkleroot)
+            // get block using hash of block index 1
+            const block = await bitcoinClient.getBlock(hash)
 
-    assert(block.merkleroot === merkleroot)
-}
+            console.log('Block height:', block.height)
 
-async function Test_GetBlockRange_FirstIndexANDLastIndex_BlockArray() {
-    const firstIndex = 383091
-    const lastIndex = 383100
+            assert.equal(block.height, height)
+        });
+    })
 
-    // merkleroot of block 1 + 10
-    const firstIndexMerkleroot = 'a83673848bbeebf312b789bbbd1ec9608ec3f822a33c8c4036a63a9d2207fb27'
-    const lastIndexMerkleroot = 'fcf97d111fb47e438ace8f1afe963cd12a02c189628f4d32283775f0e31841a8'
+    describe('Test_GetBlockRange_FirstIndexANDLastIndex_BlockArray', function () {
+        it('should return array of blocks 432001 till 432010', async function () {
+            this.timeout(20000); // this test can take up to 20 seconds
 
-    // get block using hash of block index 1
-    const blockArray = await bitcoinClient.getBlockRange(firstIndex, lastIndex)
+            const firstIndex = 432001
+            const lastIndex = 432010
 
-    //console.log(blockArray)
-    console.log('Block 383091 merkleroot:', blockArray[0].merkleroot)
-    console.log('Block 383100 merkleroot:', blockArray[9].merkleroot)
+            // get block using hash of block index 1
+            const blockArray = await bitcoinClient.getBlockRange(firstIndex, lastIndex)
 
-    assert((blockArray[0].merkleroot + blockArray[9].merkleroot) === (firstIndexMerkleroot + lastIndexMerkleroot))
-}
+            //console.log(blockArray)
+            console.log('First block height:', blockArray[0].height)
+            console.log('Last block height:', blockArray[blockArray.length-1].height)
 
-async function Test_GetBlockHash_Index_Hash() {
-    // index of block 117
-    const index = 117
+            assert.equal(JSON.stringify([blockArray[0].height, blockArray[blockArray.length-1].height]), JSON.stringify([firstIndex, lastIndex]))
+        });
+    })
 
-    // hash of block 117
-    const hash = '0000000099bf32f17e8d5103e990c108c6f2caa6bd17283a77ca026a8c3bc4c8'
+    describe('Test_GetBlockHash_Index_Hash', function () {
+        it('should return hash of block with index 432000', async function () {
+            // index of block 117
+            const index = 432000
 
-    // get block using hash of block index 1
-    const blockHash = await bitcoinClient.getBlockHash(index)
+            // hash of block 117
+            const hash = '00000000000000000206870f30cc306cbf9c80cb05c7fbfc07ad8d7b317c7af6'
 
-    console.log('Block 117 hash:', blockHash)
+            // get block using hash of block index 1
+            const blockHash = await bitcoinClient.getBlockHash(index)
 
-    assert(blockHash === hash)
-}
+            console.log('Block hash:', blockHash)
 
-async function runTests() {
-    console.log('Running tests..')
-    await Test_NodeConnection_BlockCount()
-    //await Test_GetBlock_Hash_Block()
-    //await Test_GetBlockHash_Index_Hash()
-    await Test_GetBlockRange_FirstIndexANDLastIndex_BlockArray()
-    console.log('Tests done.')
-}
-
-runTests()
+            assert(blockHash === hash)
+        });
+    })
+})
