@@ -53,6 +53,25 @@ class BitcoinClient {
     return block
   }
 
+  async getBlockRange(firstIndex, lastIndex) {
+    const MAX_BLOCK_RANGE = process.env.MAX_BLOCK_RANGE || 10
+
+    if (firstIndex > lastIndex) return
+    if (firstIndex < 0) return
+    if ((lastIndex - firstIndex) > MAX_BLOCK_RANGE) lastIndex = firstIndex + MAX_BLOCK_RANGE - 1
+
+    let blocks = []
+
+    for (let index = 0; index <= (lastIndex - firstIndex); index++) {
+      const blockHash = await this.getBlockHash(firstIndex + index)
+      const block = await this.getBlock(blockHash)
+
+      blocks.push(block)
+    }
+
+    return blocks
+  }
+
   async getBlockHash(index) {
     const dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getblockhash","params":[${index}]}`
     const options = {
