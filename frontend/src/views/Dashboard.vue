@@ -38,9 +38,7 @@ import LatestTransactions from '../components/LatestTransactions.vue'
 
 export default {
   components: { LatestTransactions, AverageFees, BlockTimeline },
-  async fetch() {
-  },
-  beforeMount () {
+  mounted () {
     socket.on('test', (data) => {
       this.messages.push(data)
     })
