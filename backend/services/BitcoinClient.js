@@ -6,11 +6,11 @@ const HOST = process.env.RPC_HOST
 const PORT = process.env.RPC_PORT
 
 const URL = `http://${USER}:${PASS}@${HOST}:${PORT}/`
+const headers = {'content-type': 'text/plain;'}
 
 class BitcoinClient {
   async getBlockCount() {
     const dataString = '{"jsonrpc":"1.0","id":"curltext","method":"getblockcount","params":[]}'
-    const headers = {'content-type': 'text/plain;'}
     const options = {
       url: URL,
       method: 'POST',
@@ -29,6 +29,28 @@ class BitcoinClient {
     }
 
     return blockCount
+  }
+
+  async getBlock(hash) {
+    const dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getblock","params":["${hash}"]}`
+    const options = {
+      url: URL,
+      method: 'POST',
+      headers,
+      data: dataString
+    }
+
+    let block;
+
+    try {
+      const response = await axios(options)
+      checkStatus200(response)
+      block = response.data.result
+    } catch (error) {
+      console.error(error)
+    }
+
+    return block
   }
 }
 
