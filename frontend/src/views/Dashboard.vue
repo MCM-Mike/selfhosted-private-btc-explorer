@@ -16,7 +16,7 @@
     </div>
 
     <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3">
-      <LatestTransactions class="col-span-2 md:col-span-1" />
+      <LatestTransactions :transactions="latestTransactions" class="col-span-2 md:col-span-1" />
       <BlockTimeline class="col-span-2 md:col-span-1" />
     </div>
 
@@ -32,12 +32,36 @@
 
 <script>
 import socket from '../plugins/socket.io'
-import BlockTimeline from '../components/BlockTimeline.vue'
+import BlockTimeline from '../components/LatestBlocks.vue'
 import AverageFees from '../components/AverageFees.vue'
 import LatestTransactions from '../components/LatestTransactions.vue'
 
 export default {
   components: { LatestTransactions, AverageFees, BlockTimeline },
+  data: () => ({
+    latestTransactions: [
+      {
+        id: '77399d98e6a818770abb5ccb7f307a8ac834dc6f693a6fbdf2e04849c677ebfb',
+        value: 7.53557498,
+        fee: 12.5
+      },
+      {
+        id: '77399d98e6a818770abb5ccb7f307a8ac834dc6f693a6fbdf2e04849c677ebfb',
+        value: 7.53557498,
+        fee: 12.5
+      },
+      {
+        id: '77399d98e6a818770abb5ccb7f307a8ac834dc6f693a6fbdf2e04849c677ebfb',
+        value: 7.53557498,
+        fee: 12.5
+      },
+      {
+        id: '77399d98e6a818770abb5ccb7f307a8ac834dc6f693a6fbdf2e04849c677ebfb',
+        value: 7.53557498,
+        fee: 12.5
+      }
+    ]
+  }),
   mounted () {
     socket.on('test', (data) => {
       this.messages.push(data)

@@ -9,9 +9,9 @@
           <div class="hidden lg:block lg:ml-6">
             <div class="flex space-x-4">
               <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-              <a href="#" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
-              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Blocks</a>
-              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Mempool</a>
+              <router-link to="/dashboard" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Dashboard</router-link>
+              <router-link to="/blocks" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Blocks</router-link>
+              <router-link to="/mempool" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Mempool</router-link>
             </div>
           </div>
         </div>
@@ -31,7 +31,7 @@
         </div>
         <div class="flex lg:hidden">
           <!-- Mobile menu button -->
-          <button type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
+          <button @click="navOpenend = !navOpenend" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
             <span class="sr-only">Open main menu</span>
             <!--
               Icon when menu is closed.
@@ -40,7 +40,7 @@
 
               Menu open: "hidden", Menu closed: "block"
             -->
-            <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <svg :class="[navOpenend ? 'hidden' : 'block']" class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
             <!--
@@ -50,7 +50,7 @@
 
               Menu open: "block", Menu closed: "hidden"
             -->
-            <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <svg :class="[navOpenend ? 'block' : 'hidden']" class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
@@ -59,24 +59,38 @@
     </div>
 
     <!-- Mobile menu, show/hide based on menu state. -->
-    <div class="lg:hidden" id="mobile-menu">
+    <div v-show="navOpenend" class="lg:hidden" id="mobile-menu">
       <div class="px-2 pt-2 pb-3 space-y-1">
         <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-        <a href="#" class="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium">Blocks</a>
-        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Mempool</a>
+        <router-link to="/dashboard" class="mobile-nav block px-3 py-2 rounded-md text-base font-medium">Dashboard</router-link>
+        <router-link to="/blocks" class="mobile-nav block px-3 py-2 rounded-md text-base font-medium">Blocks</router-link>
+        <router-link to="/mempool" class="mobile-nav block px-3 py-2 rounded-md text-base font-medium">Mempool</router-link>
       </div>
     </div>
   </nav>
 </template>
 
 <script>
-import Vue from "vue";
-
-export default Vue.extend({
-  name: "NavBar"
-});
+export default {
+  name: "NavBar",
+  data: () => ({
+    navOpenend: false,
+  })
+}
 </script>
 
 <style scoped>
+.nav-link:not(.router-link-active) {
+  @apply text-gray-300 hover:bg-gray-700 hover:text-white;
+}
+.nav-link.router-link-active {
+  @apply bg-gray-900 text-white;
+}
 
+.mobile-nav:not(.router-link-active) {
+  @apply text-gray-300 hover:bg-gray-700 hover:text-white;
+}
+.mobile-nav.router-link-active {
+  @apply bg-gray-900 text-white;
+}
 </style>

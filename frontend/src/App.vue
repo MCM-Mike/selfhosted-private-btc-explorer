@@ -1,7 +1,7 @@
 <template>
   <div>
     <nav-bar />
-    <main class="w-11/12 md:w-3/4 mx-auto mt-3">
+    <main class="w-11/12 xl:w-3/4 mx-auto mt-3">
       <router-view />
     </main>
   </div>
@@ -11,14 +11,9 @@
 import NavBar from "@/components/NavBar";
 export default {
   name: 'App',
-
   components: {
     NavBar
   },
-
-  data: () => ({
-    //
-  }),
 };
 </script>
 
