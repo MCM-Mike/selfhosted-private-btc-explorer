@@ -75,7 +75,10 @@ class BitcoinClient {
 
     for (let index = 0; index <= (lastIndex - firstIndex); index++) {
       const blockHash = await this.getBlockHash(firstIndex + index)
+      if (!blockHash) break
+
       const block = await this.getBlock(blockHash)
+      if (!block) break
 
       blocks.push(block)
     }
