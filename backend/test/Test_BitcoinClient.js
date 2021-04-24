@@ -52,8 +52,8 @@ describe('Test_BitcoinClient', function () {
 
     describe('Test_GetLatestBlocks_BlockArray', function () {
         it('should return array of last 10 blocks', async function () {
-            // this test can take up to 20 seconds
-            this.timeout(20000);
+            // this test can take up to 60 seconds
+            this.timeout(60000);
 
             const blockArray = await bitcoinClient.getLatestBlocks()
 
