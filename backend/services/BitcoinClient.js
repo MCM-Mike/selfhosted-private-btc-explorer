@@ -8,7 +8,20 @@ const PORT = process.env.RPC_PORT
 const URL = `http://${USER}:${PASS}@${HOST}:${PORT}/`
 const headers = {'content-type': 'text/plain;'}
 
+const MAX_BLOCK_RANGE = process.env.MAX_BLOCK_RANGE || 10
+
 class BitcoinClient {
+  cache = {
+    blockCount: 0, // block count of the node
+    latestBlocks: [] // 10 latest blocks
+  }
+
+  async updateCache() {
+    this.cache.blockCount = await this.getBlockCount()
+    this.cache.latestBlocks = await this.getLatestBlocks()
+    return this.cache
+  }
+
   async getBlockCount() {
     const dataString = '{"jsonrpc":"1.0","id":"curltext","method":"getblockcount","params":[]}'
     const options = {
