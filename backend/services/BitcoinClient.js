@@ -8,6 +8,8 @@ const PORT = process.env.RPC_PORT
 const URL = `http://${USER}:${PASS}@${HOST}:${PORT}/`
 const headers = {'content-type': 'text/plain;'}
 
+// default to 30 seconds
+const UPDATE_CACHE_INTERVAL_MILLISECONDS = process.env.UPDATE_CACHE_INTERVAL_MILLISECONDS || 30000
 const MAX_BLOCK_RANGE = process.env.MAX_BLOCK_RANGE || 10
 
 class BitcoinClient {
@@ -17,9 +19,15 @@ class BitcoinClient {
   }
 
   async updateCache() {
-    this.cache.blockCount = await this.getBlockCount()
-    this.cache.latestBlocks = await this.getLatestBlocks()
-    return this.cache
+    const blockCount = await this.getBlockCount()
+    const latestBlocks = await this.getLatestBlocks()
+
+    this.cache.blockCount = blockCount
+    this.cache.latestBlocks = latestBlocks
+
+    console.log('Updated cache.')
+
+    this.updateCache()
   }
 
   async getBlockCount() {

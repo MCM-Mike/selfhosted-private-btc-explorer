@@ -10,14 +10,16 @@ function socketIo(io) {
   })
 }
 
-async function getBlockCount(socket) {
-  const blockCount = await bitcoinClient.getBlockCount()
+function getBlockCount(socket) {
+  const blockCount = bitcoinClient.cache.blockCount
   socket.emit('blockCount', blockCount)
 }
 
-async function getLatestBlocks(socket) {
-  const latestBlocks = await bitcoinClient.getLatestBlocks()
+function getLatestBlocks(socket) {
+  const latestBlocks = bitcoinClient.cache.latestBlocks
   socket.emit('latestBlocks', latestBlocks)
 }
+
+bitcoinClient.updateCache()
 
 module.exports = socketIo
