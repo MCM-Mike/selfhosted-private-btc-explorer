@@ -92,7 +92,7 @@ class BitcoinClient {
 
     if (blockCount < 1) return
 
-    let firstIndex = blockCount - 10
+    let firstIndex = blockCount - 9
     const lastIndex = blockCount
 
     if (firstIndex < 0) firstIndex = 0
