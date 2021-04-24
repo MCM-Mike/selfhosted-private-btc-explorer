@@ -22,20 +22,20 @@
         </tr>
       </thead>
       <tbody class="bg-white divide-y divide-gray-200">
-        <tr v-for="i in 10" :key="i">
+        <tr v-for="(block, index) in blocks" :key="index">
           <td class="px-4 py-4 whitespace-nowrap overflow-hidden overflow-ellipsis">
             <router-link to="/transactions/1" class="text-blue-500 break-words">
-              679840
+              {{ block.height }}
             </router-link>
           </td>
           <td class="px-4 py-4 text-left whitespace-nowrap overflow-hidden overflow-ellipsis">
-            17 minutes ago
+            {{ timeSince(new Date(block.time*1000)) }} ago
           </td>
           <td class="px-4 py-4 text-right whitespace-nowrap overflow-hidden overflow-ellipsis">
-            1712
+            {{ block.tx.length }}
           </td>
           <td class="px-4 py-4 text-right text-sm text-gray-500 whitespace-nowrap overflow-hidden overflow-ellipsis">
-            1.34 MB
+            {{ fileSize(block.size) }}
           </td>
         </tr>
       </tbody>
@@ -44,6 +44,7 @@
 </template>
 <script>
 export default {
-  name: 'BlockTimeline'
+  name: 'BlockTimeline',
+  props: ['blocks']
 }
 </script>
