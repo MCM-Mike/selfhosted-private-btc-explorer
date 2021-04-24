@@ -54,8 +54,6 @@ class BitcoinClient {
   }
 
   async getBlockRange(firstIndex, lastIndex) {
-    const MAX_BLOCK_RANGE = process.env.MAX_BLOCK_RANGE || 10
-
     if (firstIndex > lastIndex) return
     if (firstIndex < 0) return
     if ((lastIndex - firstIndex) > MAX_BLOCK_RANGE) lastIndex = firstIndex + MAX_BLOCK_RANGE - 1
@@ -71,6 +69,23 @@ class BitcoinClient {
 
     return blocks
   }
+
+  // returns 10 latest blocks on the node
+  async getLatestBlocks() {
+    const blockCount = await this.getBlockCount()
+
+    if (blockCount < 1) return
+
+    let firstIndex = blockCount - 10
+    const lastIndex = blockCount
+
+    if (firstIndex < 0) firstIndex = 0
+
+    const latestBlocks = await this.getBlockRange(firstIndex, lastIndex)
+
+    return latestBlocks.reverse()
+  }
+
 
   async getBlockHash(index) {
     const dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getblockhash","params":[${index}]}`
