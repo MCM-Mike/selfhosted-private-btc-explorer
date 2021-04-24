@@ -18,20 +18,20 @@
     </tr>
     </thead>
     <tbody class="bg-white divide-y divide-gray-200">
-    <tr v-for="block in blocks" :key="block.id">
+    <tr v-for="block in blocks" :key="block.height">
       <td class="px-4 py-4 whitespace-nowrap overflow-hidden overflow-ellipsis">
-        <router-link :to="`/blocks/${block.id}`" class="text-blue-500 break-words">
-          {{ block.id }}
+        <router-link :to="`/blocks/${block.hash}`" class="text-blue-500 break-words">
+          {{ block.height }}
         </router-link>
       </td>
       <td class="px-4 py-4 text-left whitespace-nowrap overflow-hidden overflow-ellipsis">
-        17 minutes ago
+        {{ timeSince(new  Date(block.time * 1000)) }} ago
       </td>
       <td class="px-4 py-4 text-right whitespace-nowrap overflow-hidden overflow-ellipsis">
-        {{ block.numTransactions }}
+        {{ block.tx.length }}
       </td>
       <td class="px-4 py-4 text-right text-sm text-gray-500 whitespace-nowrap overflow-hidden overflow-ellipsis">
-        {{ formatBytes(block.bytes) }}
+        {{ fileSize(block.size) }}
       </td>
     </tr>
     </tbody>
