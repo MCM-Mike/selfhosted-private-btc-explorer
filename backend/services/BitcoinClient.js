@@ -8,7 +8,20 @@ const PORT = process.env.RPC_PORT
 const URL = `http://${USER}:${PASS}@${HOST}:${PORT}/`
 const headers = {'content-type': 'text/plain;'}
 
+const MAX_BLOCK_RANGE = process.env.MAX_BLOCK_RANGE || 10
+
 class BitcoinClient {
+  cache = {
+    blockCount: 0, // block count of the node
+    latestBlocks: [] // 10 latest blocks
+  }
+
+  async updateCache() {
+    this.cache.blockCount = await this.getBlockCount()
+    this.cache.latestBlocks = await this.getLatestBlocks()
+    return this.cache
+  }
+
   async getBlockCount() {
     const dataString = '{"jsonrpc":"1.0","id":"curltext","method":"getblockcount","params":[]}'
     const options = {
@@ -54,8 +67,6 @@ class BitcoinClient {
   }
 
   async getBlockRange(firstIndex, lastIndex) {
-    const MAX_BLOCK_RANGE = process.env.MAX_BLOCK_RANGE || 10
-
     if (firstIndex > lastIndex) return
     if (firstIndex < 0) return
     if ((lastIndex - firstIndex) > MAX_BLOCK_RANGE) lastIndex = firstIndex + MAX_BLOCK_RANGE - 1
@@ -64,13 +75,33 @@ class BitcoinClient {
 
     for (let index = 0; index <= (lastIndex - firstIndex); index++) {
       const blockHash = await this.getBlockHash(firstIndex + index)
+      if (!blockHash) break
+
       const block = await this.getBlock(blockHash)
+      if (!block) break
 
       blocks.push(block)
     }
 
     return blocks
   }
+
+  // returns 10 latest blocks on the node
+  async getLatestBlocks() {
+    const blockCount = await this.getBlockCount()
+
+    if (blockCount < 1) return
+
+    let firstIndex = blockCount - 9
+    const lastIndex = blockCount
+
+    if (firstIndex < 0) firstIndex = 0
+
+    const latestBlocks = await this.getBlockRange(firstIndex, lastIndex)
+
+    return latestBlocks.reverse()
+  }
+
 
   async getBlockHash(index) {
     const dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getblockhash","params":[${index}]}`

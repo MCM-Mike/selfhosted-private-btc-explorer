@@ -4,7 +4,7 @@ const BitcoinClient = require("../services/BitcoinClient")
 
 const bitcoinClient = new BitcoinClient()
 
-
+// certain tests may fail when used with a pruned bitcoin node
 describe('Test_BitcoinClient', function () {
     describe('Test_NodeConnection_BlockCount', function () {
         it('should return blockCount that is not 0', async function () {
@@ -20,8 +20,6 @@ describe('Test_BitcoinClient', function () {
         it('should return block with height 432088', async function () {
             // hash of block 1
             const hash = '0000000000000000012b1980e0117bd95412f8d0a9235731edd9b9729beb36b5'
-
-            // merkleroot of block 1
             const height = 432088
 
             // get block using hash of block index 1
@@ -35,7 +33,8 @@ describe('Test_BitcoinClient', function () {
 
     describe('Test_GetBlockRange_FirstIndexANDLastIndex_BlockArray', function () {
         it('should return array of blocks 432001 till 432010', async function () {
-            this.timeout(20000); // this test can take up to 20 seconds
+            // this test can take up to 20 seconds
+            this.timeout(20000);
 
             const firstIndex = 432001
             const lastIndex = 432010
@@ -48,6 +47,20 @@ describe('Test_BitcoinClient', function () {
             console.log('Last block height:', blockArray[blockArray.length-1].height)
 
             assert.equal(JSON.stringify([blockArray[0].height, blockArray[blockArray.length-1].height]), JSON.stringify([firstIndex, lastIndex]))
+        });
+    })
+
+    describe('Test_GetLatestBlocks_BlockArray', function () {
+        it('should return array of last 10 blocks', async function () {
+            // this test can take up to 60 seconds
+            this.timeout(60000);
+
+            const blockArray = await bitcoinClient.getLatestBlocks()
+
+            console.log('Blocks in array:', blockArray.length)
+            console.log('Latest block height:', blockArray[0].height)
+
+            assert.equal((blockArray[0].height - blockArray[blockArray.length-1].height + 1), 10)
         });
     })
 

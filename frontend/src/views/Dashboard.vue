@@ -17,7 +17,7 @@
 
     <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3">
       <LatestTransactions :transactions="latestTransactions" class="col-span-2 md:col-span-1" />
-      <BlockTimeline class="col-span-2 md:col-span-1" />
+      <BlockTimeline :blocks="latestBlocks" class="col-span-2 md:col-span-1" />
     </div>
 
     <button class="mt-3 w-full bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 rounded-md shadow focus:outline-none">
@@ -60,11 +60,13 @@ export default {
         value: 7.53557498,
         fee: 12.5
       }
-    ]
+    ],
+    latestBlocks: []
   }),
   mounted () {
-    socket.on('test', (data) => {
-      this.messages.push(data)
+    socket.emit('getLatestBlocks')
+    socket.on('latestBlocks', (data) => {
+      this.latestBlocks = data
     })
   }
 }
