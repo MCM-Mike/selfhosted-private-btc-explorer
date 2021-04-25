@@ -10,7 +10,7 @@
       </div>
       <div class="bg-white overflow-hidden shadow rounded-lg col-span-1">
         <div class="px-4 py-5 sm:p-6">
-          <h4>Memory chart</h4>
+          <Mempool />
         </div>
       </div>
     </div>
@@ -35,9 +35,10 @@ import socket from '../plugins/socket.io'
 import BlockTimeline from '../components/LatestBlocks.vue'
 import AverageFees from '../components/AverageFees.vue'
 import LatestTransactions from '../components/LatestTransactions.vue'
+import Mempool from "@/components/charts/Mempool";
 
 export default {
-  components: { LatestTransactions, AverageFees, BlockTimeline },
+  components: {Mempool, LatestTransactions, AverageFees, BlockTimeline },
   data: () => ({
     latestTransactions: [
       {

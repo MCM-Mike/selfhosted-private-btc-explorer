@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router/router';
 import '@/assets/css/tailwind.css'
+import 'chartist/dist/chartist.css';
 
 Vue.config.productionTip = false
 
