@@ -8,6 +8,7 @@ function socketIo(io) {
     socket.on('getBlockCount', () => { getBlockCount(socket) })
     socket.on('getLatestBlocks', () => { getLatestBlocks(socket) })
     socket.on('getBlock', (hashOrIndex) => { getBlock(socket, hashOrIndex) })
+    socket.on('getBlockStats', (hashOrIndex) => { getBlockStats(socket, hashOrIndex) })
     socket.on('getTransaction', (hash) => { getTransaction(socket, hash) })
     socket.on('getBlockOrTransaction', (hashOrIndex) => { getBlock(socket, hashOrIndex) })
   })
@@ -40,6 +41,14 @@ async function getBlock(socket, hashOrIndex) {
   socket.emit('block', block)
 }
 
+async function getBlockStats(socket, hashOrIndex) {
+  let blockStats;
+
+  blockStats = await bitcoinClient.getBlockStats(hashOrIndex)
+
+  socket.emit('blockStats', blockStats)
+}
+
 async function getTransaction(socket, hash) {
   const transaction = await bitcoinClient.getTransaction(hash)
   socket.emit('transaction', transaction)
@@ -62,7 +71,7 @@ async function getBlockOrTransaction(hashOrIndex) {
 }
 
 function isSha256(string) {
-  return string.matches("^[a-fA-F0-9]{64}$")
+  return /^[a-fA-F0-9]{64}$/.test(string)
 }
 
 function isNumber(string) {
