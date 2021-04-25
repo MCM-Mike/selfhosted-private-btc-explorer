@@ -33,46 +33,12 @@ class BitcoinClient {
 
   async getBlockCount() {
     const dataString = '{"jsonrpc":"1.0","id":"curltext","method":"getblockcount","params":[]}'
-    const options = {
-      url: URL,
-      method: 'POST',
-      headers,
-      data: dataString
-    }
-
-    let blockCount = 0;
-
-    try {
-      const response = await axios(options)
-      checkStatus200(response)
-      blockCount = response.data.result
-    } catch (error) {
-      console.error(error)
-    }
-
-    return blockCount
+    return await rpcCall(dataString)
   }
 
   async getBlock(hash) {
     const dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getblock","params":["${hash}"]}`
-    const options = {
-      url: URL,
-      method: 'POST',
-      headers,
-      data: dataString
-    }
-
-    let block;
-
-    try {
-      const response = await axios(options)
-      checkStatus200(response)
-      block = response.data.result
-    } catch (error) {
-      console.error(error)
-    }
-
-    return block
+    return await rpcCall(dataString)
   }
 
   async getBlockRange(firstIndex, lastIndex) {
@@ -114,47 +80,34 @@ class BitcoinClient {
 
   async getBlockHash(index) {
     const dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getblockhash","params":[${index}]}`
-    const options = {
-      url: URL,
-      method: 'POST',
-      headers,
-      data: dataString
-    }
-
-    let blockHash = '';
-
-    try {
-      const response = await axios(options)
-      checkStatus200(response)
-      blockHash = response.data.result
-    } catch (error) {
-      console.error(error)
-    }
-
-    return blockHash
+    return await rpcCall(dataString)
   }
 
   async getMempoolInfo() {
     const dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getmempoolinfo","params":[]}`
-    const options = {
-      url: URL,
-      method: 'POST',
-      headers,
-      data: dataString
-    }
-
-    let mempoolInfo;
-
-    try {
-      const response = await axios(options)
-      checkStatus200(response)
-      mempoolInfo = response.data.result
-    } catch (error) {
-      console.error(error)
-    }
-
-    return mempoolInfo
+    return await rpcCall(dataString)
   }
+}
+
+async function rpcCall(dataString) {
+  const options = {
+    url: URL,
+    method: 'POST',
+    headers,
+    data: dataString
+  }
+
+  let data;
+
+  try {
+    const response = await axios(options)
+    checkStatus200(response)
+    data = response.data.result
+  } catch (error) {
+    console.error(error)
+  }
+
+  return data
 }
 
 function checkStatus200(response) {
