@@ -18,16 +18,17 @@ class BitcoinClient {
     latestBlocks: [] // 10 latest blocks
   }
 
-  async updateCache() {
+  async updateCache(callback) {
     const blockCount = await this.getBlockCount()
     const latestBlocks = await this.getLatestBlocks()
 
     this.cache.blockCount = blockCount
     this.cache.latestBlocks = latestBlocks
 
-    console.log('Updated cache.')
+    callback()
 
-    this.updateCache()
+    // recursively update cache
+    this.updateCache(callback)
   }
 
   async getBlockCount() {

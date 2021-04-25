@@ -11,6 +11,11 @@ function socketIo(io) {
     socket.on('getTransaction', (hash) => { getTransaction(socket, hash) })
     socket.on('getBlockOrTransaction', (hashOrIndex) => { getBlock(socket, hashOrIndex) })
   })
+
+  bitcoinClient.updateCache(function () {
+    io.emit('blockCount', bitcoinClient.cache.blockCount)
+    io.emit('latestBlocks', bitcoinClient.cache.latestBlocks)
+  })
 }
 
 function getBlockCount(socket) {
@@ -67,7 +72,5 @@ function isNumber(string) {
 function isLikelyBlockHash(hash) {
   return hash.substring(0, 4) === '0000'
 }
-
-bitcoinClient.updateCache()
 
 module.exports = socketIo
