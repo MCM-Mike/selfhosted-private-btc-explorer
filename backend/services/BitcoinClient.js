@@ -41,6 +41,11 @@ class BitcoinClient {
     return await rpcCall(dataString)
   }
 
+  async getBlockStats(hashOrIndex) {
+    const dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getblockstats","params":["${hashOrIndex}"]}`
+    return await rpcCall(dataString)
+  }
+
   async getBlockRange(firstIndex, lastIndex) {
     if (firstIndex > lastIndex) return
     if (firstIndex < 0) return
