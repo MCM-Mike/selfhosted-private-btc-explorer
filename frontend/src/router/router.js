@@ -4,6 +4,7 @@ import Dashboard from '../views/Dashboard';
 import Transaction from "@/views/Transaction";
 import BlockDetails from "@/views/BlockDetails";
 import Blocks from "@/views/Blocks";
+import AddressDetails from "@/views/AddressDetails";
 
 Vue.use(VueRouter);
 
@@ -20,10 +21,6 @@ const routes = [
         component: Transaction
     },
     {
-        path: '/transactions',
-        name: 'All transactions',
-    },
-    {
         path: '/blocks/:id',
         name: 'Block details',
         component: BlockDetails
@@ -32,6 +29,11 @@ const routes = [
         path: '/blocks',
         name: 'All blocks',
         component: Blocks
+    },
+    {
+        path: '/address/:id',
+        name: 'Address details',
+        component: AddressDetails
     },
 ];
 

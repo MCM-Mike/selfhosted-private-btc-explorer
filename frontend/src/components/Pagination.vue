@@ -131,8 +131,14 @@
 export default {
   name: "Pagination",
   props: {
-    currentPage: Number,
-    totalPages: Number,
+    currentPage: {
+      default: 1,
+      required: true,
+    },
+    totalPages: {
+      default: 10,
+      required: true
+    },
   },
   methods: {
     goToFirstPage() {
