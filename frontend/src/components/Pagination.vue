@@ -7,9 +7,9 @@
           Showing
           <span class="font-medium">1</span>
           to
-          <span class="font-medium">10</span>
+          <span class="font-medium">20</span>
           of
-          <span class="font-medium">97</span>
+          <span class="font-medium">{{ totalResults }}</span>
           results
         </p>
       </div>
@@ -139,6 +139,10 @@ export default {
       default: 10,
       required: true
     },
+    totalResults: {
+      default: 0,
+      required: true
+    },
   },
   methods: {
     goToFirstPage() {
@@ -155,7 +159,7 @@ export default {
     },
     goToPage(pageNum) {
       console.log(pageNum);
-      this.$emit('update:currentPage', pageNum);
+      this.$emit('currentPage', pageNum);
     },
   }
 }

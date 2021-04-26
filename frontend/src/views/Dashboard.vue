@@ -1,6 +1,8 @@
 <template>
   <div class="w-full overflow-hidden grid-cols-3">
+    <!-- WIP
     <AverageFees />
+    -->
 
     <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3">
       <div class="bg-white overflow-hidden shadow rounded-lg col-span-1">
@@ -38,36 +40,22 @@ import LatestTransactions from '../components/LatestTransactions.vue'
 import Mempool from "@/components/charts/Mempool";
 
 export default {
+  // eslint-disable-next-line vue/no-unused-components
   components: {Mempool, LatestTransactions, AverageFees, BlockTimeline },
   data: () => ({
-    latestTransactions: [
-      {
-        id: '77399d98e6a818770abb5ccb7f307a8ac834dc6f693a6fbdf2e04849c677ebfb',
-        value: 7.53557498,
-        fee: 12.5
-      },
-      {
-        id: '77399d98e6a818770abb5ccb7f307a8ac834dc6f693a6fbdf2e04849c677ebfb',
-        value: 7.53557498,
-        fee: 12.5
-      },
-      {
-        id: '77399d98e6a818770abb5ccb7f307a8ac834dc6f693a6fbdf2e04849c677ebfb',
-        value: 7.53557498,
-        fee: 12.5
-      },
-      {
-        id: '77399d98e6a818770abb5ccb7f307a8ac834dc6f693a6fbdf2e04849c677ebfb',
-        value: 7.53557498,
-        fee: 12.5
-      }
-    ],
+    latestTransactions: [],
     latestBlocks: []
   }),
-  mounted () {
+  created() {
     socket.emit('getLatestBlocks')
+    socket.emit('getLatestTransactions')
+  },
+  beforeMount () {
     socket.on('latestBlocks', (data) => {
       this.latestBlocks = data
+    })
+    socket.on('latestTransactions', (data) => {
+      this.latestTransactions = data
     })
   }
 }

@@ -2,16 +2,19 @@
   <div class="grid gap-3">
     <BlockInfo :block-stats="blockStats"/>
 
-    <div v-if="block.height" class="bg-white shadow overflow-hidden rounded-lg px-4 py-5">
+    <div v-if="block.coinbasetx" class="bg-white shadow overflow-hidden rounded-lg px-4 py-5">
       <h2 class="text-lg font-medium text-gray-900">Coinbase transaction</h2>
-      <TransactionInputsAndOutputs :transaction="block.tx[0]" />
+      <TransactionInputsAndOutputs :txid="block.coinbasetx" />
     </div>
 
 
     <div v-if="block.height" class="bg-white shadow overflow-hidden rounded-lg px-4 py-5">
       <h2 class="text-lg font-medium text-gray-900">Transactions</h2>
+      <!--
       <TransactionTable :transactions="block.tx" :fixed="false" />
-      <Pagination :current-page="1" :total-pages="10" />
+      -->
+      <TransactionInputsAndOutputs v-for="(tx, index) in block.tx.slice(((currentPage - 1) * 100), (currentPage - 1) * 100 + 20)" :txid="tx" :key="index" />
+      <Pagination @currentPage="(data)=>{this.currentPage=data}" :current-page="currentPage" :total-pages="totalPages" :total-results="block.tx.length" />
     </div>
   </div>
 </template>
@@ -25,46 +28,18 @@ import TransactionTable from "@/components/TransactionTable";
 
 export default {
   name: "BlockDetails",
+  // eslint-disable-next-line vue/no-unused-components
   components: {TransactionTable, BlockInfo, Pagination, TransactionInputsAndOutputs},
   data: () => ({
     block: {},
     blockStats: {},
-    blockTest: {
-      transactions: [
-        {
-          id: '77399d98e6a818770abb5ccb7f307a8ac834dc6f693a6fbdf2e04849c677ebfb',
-          value: 7.53557498,
-          fee: 12.5,
-          inputs: [
-            {
-              value: 8,
-            }
-          ],
-          outputs: [
-            {
-              address: '12312334857462314',
-              value: 8
-            }
-          ]
-        },
-        {
-          id: '77399d98e6a818770abb5ccb7f307a8ac834dc6f693a6fbdf2e04849c677ebfb',
-          value: 7.53557498,
-          fee: 12.5
-        },
-        {
-          id: '77399d98e6a818770abb5ccb7f307a8ac834dc6f693a6fbdf2e04849c677ebfb',
-          value: 7.53557498,
-          fee: 12.5
-        },
-        {
-          id: '77399d98e6a818770abb5ccb7f307a8ac834dc6f693a6fbdf2e04849c677ebfb',
-          value: 7.53557498,
-          fee: 12.5
-        }
-      ]
-    }
+    currentPage: 1
   }),
+  computed: {
+    totalPages() {
+      return Math.ceil(this.block.tx.length / 20)
+    }
+  },
   created () {
     socket.on('block', (data) => {
       this.block = data
