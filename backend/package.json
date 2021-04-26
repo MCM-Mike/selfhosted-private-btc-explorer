@@ -10,7 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@mempool/electrum-client": "^1.1.8",
     "axios": "^0.21.1",
+    "bitcoinjs-lib": "^5.2.0",
     "dotenv": "^8.2.0",
     "socket.io": "^4.0.1"
   },
