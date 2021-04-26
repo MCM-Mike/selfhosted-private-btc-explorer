@@ -45,6 +45,10 @@ class ElectrumClient {
         return await this.rpcCall('blockchain.scripthash.get_balance', [scriptHash])
     }
 
+    async getTransaction(txHash) {
+        return await this.rpcCall('blockchain.transaction.get', [txHash, true])
+    }
+
     getScriptHash(address) {
         let script = bitcoin.address.toOutputScript(address)
         let hash = bitcoin.crypto.sha256(script)

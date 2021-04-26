@@ -1,4 +1,5 @@
 const axios = require('axios')
+const ElectrumClient = require('./ElectrumClient')
 
 const USER = process.env.RPC_USER
 const PASS = process.env.RPC_PASSWORD
@@ -13,11 +14,17 @@ const UPDATE_CACHE_INTERVAL_MILLISECONDS = process.env.UPDATE_CACHE_INTERVAL_MIL
 const MAX_BLOCK_RANGE = process.env.MAX_BLOCK_RANGE || 10
 
 class BitcoinClient {
+  electrumClient
   cache = {
     blockCount: 0, // block count of the node
     latestBlocks: [], // 10 latest blocks
     latestTransactions: [],
     mempool: []
+  }
+
+  constructor() {
+    this.electrumClient = new ElectrumClient()
+    this.electrumClient.connect()
   }
 
   async updateCache(callback) {
@@ -46,7 +53,8 @@ class BitcoinClient {
     mempool = mempool.slice(0, 10)
 
     for (let txHash of mempool) {
-      const tx = await this.getMempoolEntry(txHash)
+      let tx = await this.electrumClient.getTransaction(txHash)
+      tx.info = await this.getMempoolEntry(txHash)
       latestTransactions.push(tx)
     }
 
@@ -132,6 +140,10 @@ class BitcoinClient {
     let dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getrawtransaction","params":["${txid}"]}`
     if (blockHash) dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getrawtransaction","params":["${txid}", 1, "${blockHash}"]}`
     return await rpcCall(dataString)
+  }
+
+  async getTransaction(txid) {
+    return await this.electrumClient.getTransaction(txid)
   }
 }
 

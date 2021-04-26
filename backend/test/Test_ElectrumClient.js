@@ -31,4 +31,18 @@ describe('Test_ElectrumClient', function () {
             assert.ok(balance.hasOwnProperty('confirmed') && balance.hasOwnProperty('unconfirmed'))
         });
     })
+
+    describe('Test_GetTransaction_Transaction', function () {
+        it('should return transaction', async function () {
+            await electrumClient.connect()
+            const txid = '03a6f25941e6f0896ff949c5fe82a8cb168ef38b916ee83f6423ca9229a3b604'
+
+            const tx = await electrumClient.getTransaction(txid)
+            console.log('Transaction:', tx)
+
+            await electrumClient.disconnect()
+
+            assert.ok(tx.hash === txid)
+        });
+    })
 })
