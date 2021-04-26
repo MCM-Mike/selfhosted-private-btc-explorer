@@ -1,5 +1,5 @@
 require('dotenv').config()
-const PORT = process.env.PORT | 3001
+const PORT = process.env.WEB_SOCKET_PORT | 3001
 const io = require('socket.io')(PORT, {
   cors: {
     // No CORS at all
