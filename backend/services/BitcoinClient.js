@@ -23,14 +23,34 @@ class BitcoinClient {
   async updateCache(callback) {
     const blockCount = await this.getBlockCount()
     const latestBlocks = await this.getLatestBlocks()
+    const mempool = await this.getRawMempool()
+    const latestTransactions = await this.getLatestTransactions(mempool)
 
     this.cache.blockCount = blockCount
     this.cache.latestBlocks = latestBlocks
+    this.cache.latestTransactions = latestTransactions
+    this.cache.mempool = mempool
 
     callback()
 
     // recursively update cache
     this.updateCache(callback)
+  }
+
+  // mempool optional
+  async getLatestTransactions(mempool) {
+    let latestTransactions = []
+
+    if (!mempool) mempool = await this.getRawMempool()
+
+    mempool = mempool.slice(0, 10)
+
+    for (let txHash of mempool) {
+      const tx = await this.getMempoolEntry(txHash)
+      latestTransactions.push(tx)
+    }
+
+    return latestTransactions
   }
 
   async getBlockCount() {
