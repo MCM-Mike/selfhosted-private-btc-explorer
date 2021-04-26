@@ -18,4 +18,17 @@ describe('Test_ElectrumClient', function () {
             assert.ok(header.height > 0)
         });
     })
+
+    describe('Test_GetBalance_Balance', function () {
+        it('should return object with confirmed and unconfirmed key', async function () {
+            await electrumClient.connect()
+
+            const balance = await electrumClient.getBalance('3MRJtMhE7KNBmeAt9XeS3bBjUb5VeHd6wD')
+            console.log('Current balance:', balance)
+
+            await electrumClient.disconnect()
+
+            assert.ok(balance.hasOwnProperty('confirmed') && balance.hasOwnProperty('unconfirmed'))
+        });
+    })
 })
