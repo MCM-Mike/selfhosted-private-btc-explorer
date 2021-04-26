@@ -15,7 +15,9 @@ const MAX_BLOCK_RANGE = process.env.MAX_BLOCK_RANGE || 10
 class BitcoinClient {
   cache = {
     blockCount: 0, // block count of the node
-    latestBlocks: [] // 10 latest blocks
+    latestBlocks: [], // 10 latest blocks
+    latestTransactions: [],
+    mempool: []
   }
 
   async updateCache(callback) {
@@ -38,7 +40,9 @@ class BitcoinClient {
 
   async getBlock(hash) {
     const dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getblock","params":["${hash}"]}`
-    return await rpcCall(dataString)
+    let block = await rpcCall(dataString)
+    block.coinbasetx = await this.getRawTransaction(block.tx[0], block.hash)
+    return block
   }
 
   async getBlockStats(hashOrIndex) {
@@ -90,6 +94,23 @@ class BitcoinClient {
 
   async getMempoolInfo() {
     const dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getmempoolinfo","params":[]}`
+    return await rpcCall(dataString)
+  }
+
+  async getRawMempool() {
+    const dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getrawmempool","params":[]}`
+    return await rpcCall(dataString)
+  }
+
+  // get mempool transaction
+  async getMempoolEntry(txHash) {
+    const dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getmempoolentry","params":["${txHash}"]}`
+    return await rpcCall(dataString)
+  }
+
+  async getRawTransaction(txid, blockHash) {
+    let dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getrawtransaction","params":["${txid}"]}`
+    if (blockHash) dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getrawtransaction","params":["${txid}", 1, "${blockHash}"]}`
     return await rpcCall(dataString)
   }
 }
