@@ -11,11 +11,13 @@ function socketIo(io) {
     socket.on('getBlockStats', (hashOrIndex) => { getBlockStats(socket, hashOrIndex) })
     socket.on('getTransaction', (hash) => { getTransaction(socket, hash) })
     socket.on('getBlockOrTransaction', (hashOrIndex) => { getBlock(socket, hashOrIndex) })
+    socket.on('getLatestTransactions', () => { getLatestTransactions(socket) })
   })
 
   bitcoinClient.updateCache(function () {
-    io.emit('blockCount', bitcoinClient.cache.blockCount)
-    io.emit('latestBlocks', bitcoinClient.cache.latestBlocks)
+    getBlockCount(io)
+    getLatestBlocks(io)
+    getLatestTransactions(io)
   })
 }
 
@@ -68,6 +70,11 @@ async function getBlockOrTransaction(hashOrIndex) {
   }
 
   return { block, transaction }
+}
+
+async function getLatestTransactions(socket) {
+  const latestTransactions = bitcoinClient.cache.latestTransactions
+  socket.emit('latestTransactions', latestTransactions)
 }
 
 function isSha256(string) {
