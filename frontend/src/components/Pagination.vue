@@ -5,9 +5,9 @@
       <div class="hidden sm:block">
         <p class="text-sm text-gray-700">
           Showing
-          <span class="font-medium">1</span>
+          <span class="font-medium">{{ (currentPage * pageSize) - pageSize }}</span>
           to
-          <span class="font-medium">20</span>
+          <span class="font-medium">{{ currentPage * pageSize }}</span>
           of
           <span class="font-medium">{{ totalResults }}</span>
           results
@@ -135,6 +135,10 @@ export default {
       default: 1,
       required: true,
     },
+    pageSize: {
+      default: 20,
+      required: true,
+    },
     totalPages: {
       default: 10,
       required: true
@@ -158,8 +162,7 @@ export default {
       this.goToPage(this.currentPage+1);
     },
     goToPage(pageNum) {
-      console.log(pageNum);
-      this.$emit('currentPage', pageNum);
+      this.$emit('update:currentPage', pageNum);
     },
   }
 }

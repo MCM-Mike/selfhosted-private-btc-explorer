@@ -42,7 +42,7 @@
                                                        d="M4.293 15.707a1 1 0 010-1.414L8.586 10 4.293 5.707a1 1 0 011.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z"
                                                        clip-rule="evenodd"></path></svg>
                 </span>
-            <router-link v-if="output.scriptPubKey.hasOwnProperty('addresses')" :to="`/address/${output.scriptPubKey.addresses[0]}`" class="truncate">
+            <router-link v-if="output.scriptPubKey.hasOwnProperty('addresses')" :to="`/address/${output.scriptPubKey.addresses[0]}`" class="truncate text-blue-500">
               {{ output.scriptPubKey.addresses[0] }}
             </router-link>
             <span v-else class="truncate">

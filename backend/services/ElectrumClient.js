@@ -45,6 +45,11 @@ class ElectrumClient {
         return await this.rpcCall('blockchain.scripthash.get_balance', [scriptHash])
     }
 
+    async getHistory(address) {
+        const scriptHash = this.getScriptHash(address)
+        return await this.rpcCall('blockchain.scripthash.get_history', [scriptHash])
+    }
+
     async getTransaction(txHash) {
         return await this.rpcCall('blockchain.transaction.get', [txHash, true])
     }

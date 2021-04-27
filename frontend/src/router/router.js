@@ -5,6 +5,7 @@ import Transaction from "@/views/Transaction";
 import BlockDetails from "@/views/BlockDetails";
 import Blocks from "@/views/Blocks";
 import AddressDetails from "@/views/AddressDetails";
+import MempoolView from "@/views/MempoolView";
 
 Vue.use(VueRouter);
 
@@ -34,6 +35,11 @@ const routes = [
         path: '/address/:id',
         name: 'Address details',
         component: AddressDetails
+    },
+    {
+        path: '/mempool',
+        name: 'Mempool chart',
+        component: MempoolView
     },
 ];
 

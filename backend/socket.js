@@ -7,11 +7,13 @@ function socketIo(io) {
 
     socket.on('getBlockCount', () => { getBlockCount(socket) })
     socket.on('getLatestBlocks', () => { getLatestBlocks(socket) })
+    socket.on('getLatestBlocksOffset', (offset) => { getLatestBlocksOffset(socket, offset) })
     socket.on('getBlock', (hashOrIndex) => { getBlock(socket, hashOrIndex) })
     socket.on('getBlockStats', (hashOrIndex) => { getBlockStats(socket, hashOrIndex) })
     socket.on('getTransaction', (hash) => { getTransaction(socket, hash) })
     socket.on('getBlockOrTransaction', (hashOrIndex) => { getBlock(socket, hashOrIndex) })
     socket.on('getLatestTransactions', () => { getLatestTransactions(socket) })
+    socket.on('getAddressInfo', (address) => { getAddressInfo(socket, address) })
   })
 
   bitcoinClient.updateCache(function () {
@@ -29,6 +31,11 @@ function getBlockCount(socket) {
 function getLatestBlocks(socket) {
   const latestBlocks = bitcoinClient.cache.latestBlocks
   socket.emit('latestBlocks', latestBlocks)
+}
+
+async function getLatestBlocksOffset(socket, offset) {
+  const latestBlocks = await bitcoinClient.getLatestBlocksOffset(offset, 20);
+  socket.emit('latestBlocksOffset', latestBlocks)
 }
 
 async function getBlock(socket, hashOrIndex) {
@@ -75,6 +82,11 @@ async function getBlockOrTransaction(hashOrIndex) {
 async function getLatestTransactions(socket) {
   const latestTransactions = bitcoinClient.cache.latestTransactions
   socket.emit('latestTransactions', latestTransactions)
+}
+
+async function getAddressInfo(socket, address) {
+  const info = await bitcoinClient.getAddressInfo(address)
+  socket.emit('addressInfo', info)
 }
 
 function isSha256(string) {

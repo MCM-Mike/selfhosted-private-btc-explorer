@@ -4,7 +4,7 @@
 
     <div v-if="block.coinbasetx" class="bg-white shadow overflow-hidden rounded-lg px-4 py-5">
       <h2 class="text-lg font-medium text-gray-900">Coinbase transaction</h2>
-      <TransactionInputsAndOutputs :txid="block.coinbasetx" />
+      <TransactionInputsAndOutputs :txid="block.coinbasetx.txid" />
     </div>
 
 
@@ -13,8 +13,8 @@
       <!--
       <TransactionTable :transactions="block.tx" :fixed="false" />
       -->
-      <TransactionInputsAndOutputs v-for="(tx, index) in block.tx.slice(((currentPage - 1) * 100), (currentPage - 1) * 100 + 20)" :txid="tx" :key="index" />
-      <Pagination @currentPage="(data)=>{this.currentPage=data}" :current-page="currentPage" :total-pages="totalPages" :total-results="block.tx.length" />
+      <TransactionInputsAndOutputs v-for="(tx) in pageData" :txid="tx" :key="tx" />
+      <Pagination :current-page.sync="currentPage" :total-pages="totalPages" :total-results="block.tx.length" page-size="20" />
     </div>
   </div>
 </template>
@@ -38,6 +38,9 @@ export default {
   computed: {
     totalPages() {
       return Math.ceil(this.block.tx.length / 20)
+    },
+    pageData() {
+      return this.block.tx.slice((this.currentPage * 20) - 20 + 1, this.currentPage * 20);
     }
   },
   created () {

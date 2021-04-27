@@ -11,7 +11,7 @@ const headers = {'content-type': 'text/plain;'}
 
 // default to 30 seconds
 const UPDATE_CACHE_INTERVAL_MILLISECONDS = process.env.UPDATE_CACHE_INTERVAL_MILLISECONDS || 30000
-const MAX_BLOCK_RANGE = process.env.MAX_BLOCK_RANGE || 10
+const MAX_BLOCK_RANGE = process.env.MAX_BLOCK_RANGE || 20
 
 class BitcoinClient {
   electrumClient
@@ -114,6 +114,19 @@ class BitcoinClient {
     return latestBlocks.reverse()
   }
 
+  // returns amount of blocks by an offset
+  async getLatestBlocksOffset(offset, numBlocks) {
+    const latestBlock = await this.getBlockCount()
+
+    if (latestBlock < 1) return
+
+    const highestIndex = latestBlock - offset+1
+    const lowestIndex = highestIndex - numBlocks-1
+
+    const blocks = await this.getBlockRange(lowestIndex, highestIndex)
+
+    return blocks.reverse()
+  }
 
   async getBlockHash(index) {
     const dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getblockhash","params":[${index}]}`
@@ -144,6 +157,17 @@ class BitcoinClient {
 
   async getTransaction(txid) {
     return await this.electrumClient.getTransaction(txid)
+  }
+
+  async getAddressInfo(address) {
+    const balance = await this.electrumClient.getBalance(address)
+    const history = await this.electrumClient.getHistory(address)
+
+    return {
+      address: address,
+      balance: balance.confirmed,
+      history: history.map((tx) => tx.tx_hash)
+    }
   }
 }
 

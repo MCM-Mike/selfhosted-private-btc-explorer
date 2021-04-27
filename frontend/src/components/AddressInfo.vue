@@ -42,7 +42,7 @@
             Current balance
           </dt>
           <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-            {{ wallet.balance }} BTC
+            {{ wallet.balance / 100000000 }} BTC
           </dd>
         </div>
       </dl>
@@ -82,8 +82,6 @@ export default {
       if (!validate(this.wallet.address)) {
         return false;
       }
-
-      console.log(getAddressInfo(this.wallet.address));
 
       return getAddressInfo(this.wallet.address).type;
     }

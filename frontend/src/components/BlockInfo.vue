@@ -6,7 +6,10 @@
           Block #{{ blockStats.height }}
         </h3>
       </div>
-      <p class="text-gray-500">{{ new Date(blockStats.time * 1000) }} ({{ timeSince(new Date(blockStats.time * 1000)) }} ago)</p>
+      <p class="text-gray-500">{{ new Intl.DateTimeFormat('default', {
+        dateStyle: 'medium',
+        timeStyle: 'medium'
+      }).format(new Date(blockStats.time * 1000)) }} ({{ timeSince(new Date(blockStats.time * 1000)) }} ago)</p>
     </div>
     <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
       <dl class="sm:divide-y sm:divide-gray-200">

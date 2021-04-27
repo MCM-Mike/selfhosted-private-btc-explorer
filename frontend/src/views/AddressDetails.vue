@@ -4,49 +4,32 @@
 
     <div class="bg-white shadow overflow-hidden rounded-lg px-4 py-5">
       <h2 class="text-lg font-medium text-gray-900">Transactions</h2>
-      <TransactionTable :fixed="false" :transactions="wallet.transactions" />
+      <TransactionInputsAndOutputs v-for="(tx) in wallet.history" :txid="tx" :key="tx" />
     </div>
   </div>
 </template>
 
 <script>
 import AddressInfo from "@/components/AddressInfo";
-import TransactionTable from "@/components/TransactionTable";
+import socket from "@/plugins/socket.io";
+import TransactionInputsAndOutputs from "@/components/TransactionInputsAndOutputs";
+
 export default {
 name: "AddressDetails",
-  components: {TransactionTable, AddressInfo},
+  components: {TransactionInputsAndOutputs, AddressInfo},
   data: () => ({
-    wallet: {
-      address: "1Muxr4hJvwzeTjE98PX7NoLigJ3BPzJrcx",
-      received: 6,
-      sent: 4,
-      balance: 2,
-      transactions: [
-        {
-          id: '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
-          value: 1
-        },
-        {
-          id: '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
-          value: 1
-        },
-        {
-          id: '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
-          value: 1
-        },{
-          id: '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
-          value: 1
-        },{
-          id: '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
-          value: 1
-        },
-        {
-          id: '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
-          value: 1
-        },
-      ]
-    }
+    wallet: {}
   }),
+  created() {
+    this.wallet.address = this.$route.params.id;
+    socket.emit('getAddressInfo', this.$route.params.id)
+  },
+  beforeMount () {
+    socket.on('addressInfo', (data) => {
+      this.wallet = data;
+      console.log(data);
+    })
+  }
 }
 </script>
 

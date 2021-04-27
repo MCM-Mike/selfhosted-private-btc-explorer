@@ -1,6 +1,6 @@
 <template>
   <div class="grid gap-3">
-    <TransactionDetails :transaction-id="$route.params.id"/>
+    <TransactionDetails :transaction="transaction"/>
 
     <div class="rounded-lg bg-gray-200 overflow-hidden shadow divide-y divide-gray-200 sm:divide-y-0 sm:grid sm:grid-cols-2 sm:gap-px">
       <div class="relative group bg-white p-6">
@@ -11,20 +11,12 @@
           Inputs
         </div>
         <dl class="sm:divide-y sm:divide-gray-200">
-          <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <div v-for="(input, index) in transaction.vin" :key="index" class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt class="text-sm font-medium text-gray-500">
-              3LVVE1rXCp4YTGqP7XJi4Vz7kS9BEk2S7t
+              {{ input.txid }}
             </dt>
             <dd class="mt-1 text-sm text-right text-gray-900 sm:mt-0 sm:col-span-2">
-              0.00030900 BTC
-            </dd>
-          </div>
-          <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500">
-              3LVVE1rXCp4YTGqP7XJi4Vz7kS9BEk2S7t
-            </dt>
-            <dd class="mt-1 text-sm text-right text-gray-900 sm:mt-0 sm:col-span-2">
-              0.00269694 BTC
+              {{ input.value }} BTC
             </dd>
           </div>
         </dl>
@@ -38,20 +30,17 @@
           </span>
         </div>
         <dl class="sm:divide-y sm:divide-gray-200">
-          <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <div v-for="(output, index) in transaction.vout" :key="index" class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt class="text-sm font-medium text-gray-500">
-              3LVVE1rXCp4YTGqP7XJi4Vz7kS9BEk2S7t
+              <router-link v-if="output.scriptPubKey.hasOwnProperty('addresses')" :to="`/address/${output.scriptPubKey.addresses[0]}`" class="text-blue-500">
+                {{ output.scriptPubKey.addresses[0] }}
+              </router-link>
+              <span v-else class="truncate">
+                {{ output.scriptPubKey.asm }}
+              </span>
             </dt>
             <dd class="mt-1 text-sm text-right text-gray-900 sm:mt-0 sm:col-span-2">
-              0.00030900 BTC
-            </dd>
-          </div>
-          <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500">
-              3LVVE1rXCp4YTGqP7XJi4Vz7kS9BEk2S7t
-            </dt>
-            <dd class="mt-1 text-sm text-right text-gray-900 sm:mt-0 sm:col-span-2">
-              0.00269694 BTC
+              {{ output.value }} BTC
             </dd>
           </div>
         </dl>
@@ -62,11 +51,28 @@
 
 <script>
 import TransactionDetails from "../components/TransactionInfo";
+import socket from "@/plugins/socket.io";
+
 
 export default {
   name: "transaction",
   components: {TransactionDetails},
-  methods: {}
+  methods: {},
+  data: () => ({
+    transaction: {}
+  }),
+  created() {
+    const txid = this.$route.params.id;
+
+    socket.emit('getTransaction', txid)
+  },
+  beforeMount () {
+    socket.on('transaction', (data) => {
+      if (data?.txid === this.$route.params.id) {
+        this.transaction = {...data}
+      }
+    })
+  }
 }
 </script>
 
