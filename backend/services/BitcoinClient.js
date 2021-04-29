@@ -9,8 +9,6 @@ const PORT = process.env.RPC_PORT
 const URL = `http://${USER}:${PASS}@${HOST}:${PORT}/`
 const headers = {'content-type': 'text/plain;'}
 
-// default to 30 seconds
-const UPDATE_CACHE_INTERVAL_MILLISECONDS = process.env.UPDATE_CACHE_INTERVAL_MILLISECONDS || 30000
 const MAX_BLOCK_RANGE = process.env.MAX_BLOCK_RANGE || 20
 
 class BitcoinClient {
