@@ -37,6 +37,10 @@ VUE_APP_SOCKET_URL=http://localhost:3001
 2. Point the VUE_APP_SOCKET_URL to your backend. By default, it is on localhost port 3001.
 3. Run ```npm run build```.
 
+### Testing the backend
+Backend tests are made using the Mocha testing framework.
+1. To run the tests, while in the backend directory, run the command ```npm test```.
+
 ### Running the frontend
 The frontend is a static page located in the /dist folder in the frontend directory after running the npm run build command. There are multiple ways of serving a static webpage, like using NGINX.
 
