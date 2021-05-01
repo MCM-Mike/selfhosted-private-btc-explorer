@@ -2,12 +2,6 @@
   <div class="grid gap-3">
     <BlockInfo :block-stats="blockStats"/>
 
-    <div v-if="block.coinbasetx" class="bg-white shadow overflow-hidden rounded-lg px-4 py-5">
-      <h2 class="text-lg font-medium text-gray-900">Coinbase transaction</h2>
-      <TransactionInputsAndOutputs :txid="block.coinbasetx.txid" />
-    </div>
-
-
     <div v-if="block.height" class="bg-white shadow overflow-hidden rounded-lg px-4 py-5">
       <h2 class="text-lg font-medium text-gray-900">Transactions</h2>
       <!--
@@ -40,7 +34,7 @@ export default {
       return Math.ceil(this.block.tx.length / 20)
     },
     pageData() {
-      return this.block.tx.slice((this.currentPage * 20) - 20 + 1, this.currentPage * 20);
+      return this.block.tx.slice((this.currentPage * 20) - 20, this.currentPage * 20);
     }
   },
   created () {
@@ -54,6 +48,13 @@ export default {
   beforeMount() {
     socket.emit('getBlockStats', this.$route.params.id)
     socket.emit('getBlock', this.$route.params.id)
+  },
+  watch: {
+    // eslint-disable-next-line no-unused-vars
+    '$route' (to, from) {
+      socket.emit('getBlockStats', this.$route.params.id)
+      socket.emit('getBlock', this.$route.params.id)
+    }
   }
 }
 </script>
