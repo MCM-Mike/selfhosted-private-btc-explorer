@@ -61,19 +61,20 @@ class BitcoinClient {
 
   async getBlockCount() {
     const dataString = '{"jsonrpc":"1.0","id":"curltext","method":"getblockcount","params":[]}'
-    return await rpcCall(dataString)
+    return await this.rpcCall(dataString)
   }
 
   async getBlock(hash) {
     const dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getblock","params":["${hash}"]}`
-    let block = await rpcCall(dataString)
+    let block = await this.rpcCall(dataString)
     block.coinbasetx = await this.getRawTransaction(block.tx[0], block.hash)
     return block
   }
 
   async getBlockStats(hashOrIndex) {
-    const dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getblockstats","params":["${hashOrIndex}"]}`
-    return await rpcCall(dataString)
+    let dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getblockstats","params":["${hashOrIndex}"]}`
+    if (isNumber(hashOrIndex)) dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getblockstats","params":[${hashOrIndex}]}`
+    return await this.rpcCall(dataString)
   }
 
   async getBlockRange(firstIndex, lastIndex) {
@@ -127,30 +128,31 @@ class BitcoinClient {
   }
 
   async getBlockHash(index) {
+    index = parseInt(index)
     const dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getblockhash","params":[${index}]}`
-    return await rpcCall(dataString)
+    return await this.rpcCall(dataString)
   }
 
   async getMempoolInfo() {
     const dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getmempoolinfo","params":[]}`
-    return await rpcCall(dataString)
+    return await this.rpcCall(dataString)
   }
 
   async getRawMempool() {
     const dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getrawmempool","params":[]}`
-    return await rpcCall(dataString)
+    return await this.rpcCall(dataString)
   }
 
   // get mempool transaction
   async getMempoolEntry(txHash) {
     const dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getmempoolentry","params":["${txHash}"]}`
-    return await rpcCall(dataString)
+    return await this.rpcCall(dataString)
   }
 
   async getRawTransaction(txid, blockHash) {
     let dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getrawtransaction","params":["${txid}"]}`
     if (blockHash) dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getrawtransaction","params":["${txid}", 1, "${blockHash}"]}`
-    return await rpcCall(dataString)
+    return await this.rpcCall(dataString)
   }
 
   async getTransaction(txid) {
@@ -167,33 +169,37 @@ class BitcoinClient {
       history: history.map((tx) => tx.tx_hash)
     }
   }
-}
 
-async function rpcCall(dataString) {
-  const options = {
-    url: URL,
-    method: 'POST',
-    headers,
-    data: dataString
+  async rpcCall(dataString) {
+    const options = {
+      url: URL,
+      method: 'POST',
+      headers,
+      data: dataString
+    }
+
+    let data;
+
+    try {
+      const response = await axios(options)
+      checkStatus200(response)
+      data = response.data.result
+    } catch (error) {
+      console.error(error)
+    }
+
+    return data
   }
-
-  let data;
-
-  try {
-    const response = await axios(options)
-    checkStatus200(response)
-    data = response.data.result
-  } catch (error) {
-    console.error(error)
-  }
-
-  return data
 }
 
 function checkStatus200(response) {
   if (response.status !== 200) {
     throw new Error('Bitcoin node unreachable')
   }
+}
+
+function isNumber(string) {
+  return !isNaN(string)
 }
 
 module.exports = BitcoinClient

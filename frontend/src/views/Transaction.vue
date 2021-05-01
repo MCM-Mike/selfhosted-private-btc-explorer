@@ -72,6 +72,14 @@ export default {
         this.transaction = {...data}
       }
     })
+  },
+  watch: {
+    // eslint-disable-next-line no-unused-vars
+    '$route' (to, from) {
+      const txid = this.$route.params.id;
+
+      socket.emit('getTransaction', txid)
+    }
   }
 }
 </script>

@@ -29,6 +29,13 @@ name: "AddressDetails",
       this.wallet = data;
       console.log(data);
     })
+  },
+  watch: {
+    // eslint-disable-next-line no-unused-vars
+    '$route' (to, from) {
+      this.wallet.address = this.$route.params.id;
+      socket.emit('getAddressInfo', this.$route.params.id)
+    }
   }
 }
 </script>

@@ -4,14 +4,13 @@ const bitcoinClient = new BitcoinClient()
 function socketIo(io) {
   io.on('connection', (socket) => {
     console.log('Client connected.')
-
     socket.on('getBlockCount', () => { getBlockCount(socket) })
     socket.on('getLatestBlocks', () => { getLatestBlocks(socket) })
     socket.on('getLatestBlocksOffset', (offset) => { getLatestBlocksOffset(socket, offset) })
     socket.on('getBlock', (hashOrIndex) => { getBlock(socket, hashOrIndex) })
     socket.on('getBlockStats', (hashOrIndex) => { getBlockStats(socket, hashOrIndex) })
     socket.on('getTransaction', (hash) => { getTransaction(socket, hash) })
-    socket.on('getBlockOrTransaction', (hashOrIndex) => { getBlock(socket, hashOrIndex) })
+    socket.on('getBlockOrTransaction', (hashOrIndex) => { getBlockOrTransaction(socket, hashOrIndex) })
     socket.on('getLatestTransactions', () => { getLatestTransactions(socket) })
     socket.on('getAddressInfo', (address) => { getAddressInfo(socket, address) })
   })
@@ -64,19 +63,19 @@ async function getTransaction(socket, hash) {
 }
 
 // can't recognize a block hash from a tx hash
-async function getBlockOrTransaction(hashOrIndex) {
+async function getBlockOrTransaction(socket, hashOrIndex) {
   let block;
-  let transaction;
+  let tx;
 
-  if (isSha256(hashOrIndex)) {
-    if (isLikelyBlockHash(hashOrIndex)) block = await bitcoinClient.getBlock(hashOrIndex)
-    //if (!block) transaction = await bitcoinClient.getTransaction(hashOrIndex)
-  } else if (isNumber(hashOrIndex)) {
+  if (isNumber(hashOrIndex)) {
     const blockHash = await bitcoinClient.getBlockHash(hashOrIndex)
     block = await bitcoinClient.getBlock(blockHash)
+  } else if (isSha256(hashOrIndex)) {
+    if (isLikelyBlockHash(hashOrIndex)) block = await bitcoinClient.getBlock(hashOrIndex)
+    if (!block) tx = await bitcoinClient.getTransaction(hashOrIndex)
   }
 
-  return { block, transaction }
+  socket.emit('blockOrTransaction', { block, tx })
 }
 
 async function getLatestTransactions(socket) {
