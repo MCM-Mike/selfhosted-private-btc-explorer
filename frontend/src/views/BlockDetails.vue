@@ -1,6 +1,6 @@
 <template>
   <div class="grid gap-3">
-    <BlockInfo :block-stats="blockStats"/>
+    <BlockInfo v-if="blockStats" :block-stats="blockStats"/>
 
     <h2 class="text-lg font-medium text-gray-900">{{ block.tx.length }} Transactions</h2>
     <div v-for="tx in pageData" :key="tx" class="bg-white shadow overflow-hidden rounded-lg px-4 py-5">
