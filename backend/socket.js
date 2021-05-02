@@ -9,7 +9,7 @@ function socketIo(io) {
     socket.on('getLatestBlocksOffset', (offset) => { getLatestBlocksOffset(socket, offset) })
     socket.on('getBlock', (hashOrIndex) => { getBlock(socket, hashOrIndex) })
     socket.on('getBlockStats', (hashOrIndex) => { getBlockStats(socket, hashOrIndex) })
-    socket.on('getTransaction', (hash) => { getTransaction(socket, hash) })
+    socket.on('getTransaction', (hash) => { getTransactionInputs(socket, hash) })
     socket.on('getBlockOrTransaction', (hashOrIndex) => { getBlockOrTransaction(socket, hashOrIndex) })
     socket.on('getLatestTransactions', () => { getLatestTransactions(socket) })
     socket.on('getAddressInfo', (address) => { getAddressInfo(socket, address) })
@@ -59,6 +59,11 @@ async function getBlockStats(socket, hashOrIndex) {
 
 async function getTransaction(socket, hash) {
   const transaction = await bitcoinClient.getTransaction(hash)
+  socket.emit('transaction', transaction)
+}
+
+async function getTransactionInputs(socket, hash) {
+  const transaction = await bitcoinClient.getTransactionAndInputs(hash)
   socket.emit('transaction', transaction)
 }
 

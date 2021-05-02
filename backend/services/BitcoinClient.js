@@ -26,20 +26,24 @@ class BitcoinClient {
   }
 
   async updateCache(callback) {
-    const blockCount = await this.getBlockCount()
-    const latestBlocks = await this.getLatestBlocks()
-    const mempool = await this.getRawMempool()
-    const latestTransactions = await this.getLatestTransactions(mempool)
+    try {
+      const blockCount = await this.getBlockCount()
+      const latestBlocks = await this.getLatestBlocks()
+      const mempool = await this.getRawMempool()
+      const latestTransactions = await this.getLatestTransactions(mempool)
 
-    this.cache.blockCount = blockCount
-    this.cache.latestBlocks = latestBlocks
-    this.cache.latestTransactions = latestTransactions
-    this.cache.mempool = mempool
+      this.cache.blockCount = blockCount
+      this.cache.latestBlocks = latestBlocks
+      this.cache.latestTransactions = latestTransactions
+      this.cache.mempool = mempool
 
-    callback()
-
-    // recursively update cache
-    this.updateCache(callback)
+      callback()
+    } catch (error) {
+      console.log(error)
+    } finally {
+      // recursively update cache
+      this.updateCache(callback)
+    }
   }
 
   // mempool optional
@@ -157,6 +161,20 @@ class BitcoinClient {
 
   async getTransaction(txid) {
     return await this.electrumClient.getTransaction(txid)
+  }
+
+  async getTransactionAndInputs(txid) {
+    let tx = await this.getTransaction(txid)
+
+    if (!tx) return undefined
+
+    for (let index = 0; index < tx.vin.length; index++) {
+      if (tx.vin[index].coinbase || !tx.vin[index].txid) continue
+      // get input transaction so that we can calculate the value in the frontend
+      tx.vin[index].tx = await this.getTransaction(tx.vin[index].txid)
+    }
+
+    return tx
   }
 
   async getAddressInfo(address) {

@@ -34,7 +34,7 @@
             Fee
           </dt>
           <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-            ...
+            {{ totalFees }} BTC
           </dd>
         </div>
 <!--        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">-->
@@ -90,9 +90,23 @@ export default {
   props: {
     transaction: Object
   },
-  watch: {
-    transaction() {
-      console.log(this.transaction)
+  computed: {
+    totalOutputValue() {
+      let totalOutputValue = 0
+      for (const output of this.transaction.vout) {
+        totalOutputValue += output.value
+      }
+      return totalOutputValue
+    },
+    totalInputValue() {
+      let totalInputValue = 0
+      for (const input of this.transaction.vin) {
+        totalInputValue += input.tx.vout[input.vout].value
+      }
+      return totalInputValue
+    },
+    totalFees() {
+      return this.totalInputValue - this.totalOutputValue
     }
   },
   methods: {
