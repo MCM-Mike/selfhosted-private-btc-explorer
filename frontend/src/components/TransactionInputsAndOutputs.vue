@@ -28,7 +28,8 @@
                 <router-link
                     v-if="input.txid"
                     :to="`/address/${input.tx.vout[input.vout].scriptPubKey.addresses[0]}`"
-                    class="text-blue-500"
+                    class="text-green-500"
+                    :class="{'text-blue-500': input.tx.vout[input.vout].scriptPubKey.addresses[0] !== address}"
                 >
                   {{ input.tx.vout[input.vout].scriptPubKey.addresses[0] }}
                 </router-link>
@@ -60,7 +61,8 @@
                 <router-link
                     v-if="output.scriptPubKey.hasOwnProperty('addresses')"
                     :to="`/address/${output.scriptPubKey.addresses[0]}`"
-                    class="text-blue-500"
+                    class="text-green-500"
+                    :class="{'text-blue-500': output.scriptPubKey.addresses[0] !== address}"
                 >
                   {{ output.scriptPubKey.addresses[0] }}
                 </router-link>
@@ -96,7 +98,8 @@ export default {
     totalFees: 0
   }),
   props: {
-    txid: String
+    txid: String,
+    address: String
   },
   methods: {
     calcTotalOutputValue() {
