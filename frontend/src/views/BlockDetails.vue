@@ -2,14 +2,11 @@
   <div class="grid gap-3">
     <BlockInfo :block-stats="blockStats"/>
 
-    <div v-if="block.height" class="bg-white shadow overflow-hidden rounded-lg px-4 py-5">
-      <h2 class="text-lg font-medium text-gray-900">Transactions</h2>
-      <!--
-      <TransactionTable :transactions="block.tx" :fixed="false" />
-      -->
-      <TransactionInputsAndOutputs v-for="(tx) in pageData" :txid="tx" :key="tx" />
-      <Pagination :current-page.sync="currentPage" :total-pages="totalPages" :total-results="block.tx.length" page-size="20" />
+    <h2 class="text-lg font-medium text-gray-900">{{ block.tx.length }} Transactions</h2>
+    <div v-for="tx in pageData" :key="tx" class="bg-white shadow overflow-hidden rounded-lg px-4 py-5">
+      <TransactionInputsAndOutputs :txid="tx" />
     </div>
+    <Pagination :current-page.sync="currentPage" :total-pages="totalPages" :total-results="block.tx.length || 0" page-size="20" />
   </div>
 </template>
 
@@ -18,14 +15,14 @@ import socket from '../plugins/socket.io'
 import TransactionInputsAndOutputs from "../components/TransactionInputsAndOutputs";
 import Pagination from "@/components/Pagination";
 import BlockInfo from "@/components/BlockInfo";
-import TransactionTable from "@/components/TransactionTable";
 
 export default {
   name: "BlockDetails",
-  // eslint-disable-next-line vue/no-unused-components
-  components: {TransactionTable, BlockInfo, Pagination, TransactionInputsAndOutputs},
+  components: {BlockInfo, Pagination, TransactionInputsAndOutputs},
   data: () => ({
-    block: {},
+    block: {
+      tx: []
+    },
     blockStats: {},
     currentPage: 1
   }),
@@ -34,7 +31,7 @@ export default {
       return Math.ceil(this.block.tx.length / 20)
     },
     pageData() {
-      return this.block.tx.slice((this.currentPage * 20) - 20, this.currentPage * 20);
+      return this.block?.tx.slice((this.currentPage * 20) - 20, this.currentPage * 20);
     }
   },
   created () {

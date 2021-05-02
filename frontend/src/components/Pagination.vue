@@ -1,6 +1,6 @@
 <template>
   <!-- This example requires Tailwind CSS v2.0+ -->
-  <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+  <div class="px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
     <div class="flex-1 flex items-center sm:justify-between justify-end">
       <div class="hidden sm:block">
         <p class="text-sm text-gray-700">
