@@ -21,14 +21,6 @@
       <LatestTransactions :transactions="latestTransactions" class="col-span-2 md:col-span-1" />
       <BlockTimeline :blocks="latestBlocks" class="col-span-2 md:col-span-1" />
     </div>
-
-    <button class="mt-3 w-full bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 rounded-md shadow focus:outline-none">
-      Back to top ^
-    </button>
-
-    <p class="block w-full text-sm p-4 text-center">
-      &copy; DutchBits 2021
-    </p>
   </div>
 </template>
 
@@ -50,7 +42,7 @@ export default {
     socket.emit('getLatestBlocks')
     socket.emit('getLatestTransactions')
   },
-  beforeMount () {
+  mounted () {
     socket.on('latestBlocks', (data) => {
       this.latestBlocks = data
     })
