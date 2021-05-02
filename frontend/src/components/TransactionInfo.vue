@@ -104,7 +104,7 @@ export default {
       let totalInputValue = 0
       for (const input of this.transaction.vin) {
         if (input.coinbase) continue
-        totalInputValue = input.tx.vout[input.vout].value
+        totalInputValue += input.tx.vout[input.vout].value
       }
       return totalInputValue
     },
