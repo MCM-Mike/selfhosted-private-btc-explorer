@@ -26,7 +26,7 @@
                  class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt class="text-sm font-medium text-gray-500">
                 <router-link
-                    v-if="input.txid"
+                    v-if="input.tx"
                     :to="`/address/${input.tx.vout[input.vout].scriptPubKey.addresses[0]}`"
                     class="text-green-500"
                     :class="{'text-blue-500': input.tx.vout[input.vout].scriptPubKey.addresses[0] !== address}"
@@ -35,7 +35,7 @@
                 </router-link>
                 <span v-else>Coinbase (Newly Generated Coins)</span>
               </dt>
-              <dd class="mt-1 text-sm text-right text-gray-900 sm:mt-0 sm:col-span-2">
+              <dd v-if="input.tx" class="mt-1 text-sm text-right text-gray-900 sm:mt-0 sm:col-span-2">
                 {{ input.tx.vout[input.vout].value }} BTC
               </dd>
             </div>
@@ -77,7 +77,7 @@
           </dl>
         </div>
       </div>
-      <span class="badge bg-red-100 text-red-800 float-left">
+      <span v-if="transaction.vin && transaction.vin[0].txid" class="badge bg-red-100 text-red-800 float-left">
         Fee: {{ totalFees.toFixed(8) }} BTC
       </span>
       <span class="badge bg-green-100 text-green-800 float-right">
