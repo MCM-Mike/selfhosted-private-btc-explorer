@@ -21,7 +21,7 @@
           </span>
             Inputs
           </div>
-          <dl class="sm:divide-y sm:divide-gray-200">
+          <dl v-if="transaction" class="sm:divide-y sm:divide-gray-200">
             <div v-for="(input, index) in transaction.vin" :key="index"
                  class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt class="text-sm font-medium text-gray-500">
@@ -53,7 +53,7 @@
                                                  clip-rule="evenodd"></path></svg>
           </span>
           </div>
-          <dl class="sm:divide-y sm:divide-gray-200">
+          <dl v-if="transaction" class="sm:divide-y sm:divide-gray-200">
             <div v-for="(output, index) in transaction.vout" :key="index"
                  class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt class="text-sm font-medium text-gray-500">
@@ -90,40 +90,46 @@ import socket from "@/plugins/socket.io";
 export default {
   name: 'TransactionInputsAndOutputs',
   data: () => ({
-    transaction: [],
+    transaction: {},
+    totalOutputValue: 0,
+    totalInputValue: 0,
+    totalFees: 0
   }),
   props: {
     txid: String
   },
-  computed: {
-    totalOutputValue() {
+  methods: {
+    calcTotalOutputValue() {
       let totalOutputValue = 0
       for (const output of this.transaction.vout) {
         totalOutputValue += output.value
       }
-      return totalOutputValue
+      this.totalOutputValue = totalOutputValue
     },
-    totalInputValue() {
+    calcTotalInputValue() {
       let totalInputValue = 0
-      for (const input of this.transaction.vin) {
-        totalInputValue += input.tx.vout[input.vout].value
+      for (let index = 0; index < this.transaction.vin.length; index++) {
+        if (this.transaction.vin[index].coinbase || !this.transaction.vin[index].txid) continue
+        totalInputValue += this.transaction.vin[index].tx.vout[this.transaction.vin[index].vout].value
       }
-      return totalInputValue
+      this.totalInputValue = totalInputValue
     },
-    totalFees() {
-      return this.totalInputValue - this.totalOutputValue
+    calcTotalFees() {
+      this.totalFees = this.totalInputValue - this.totalOutputValue
     }
   },
   created() {
-    socket.emit('getTransaction', this.txid)
-  },
-  beforeMount() {
     socket.on('transaction', (data) => {
       if (data?.txid === this.txid) {
-        console.log(data);
         this.transaction = data;
+        this.calcTotalOutputValue()
+        this.calcTotalInputValue()
+        this.calcTotalFees()
       }
     })
+  },
+  beforeMount() {
+    socket.emit('getTransaction', this.txid)
   }
 }
 </script>

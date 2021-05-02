@@ -85,13 +85,14 @@
 </template>
 <script>
 export default {
-  name: 'TransactionDetails',
+  name: 'TransactionInfo',
   components: {},
   props: {
     transaction: Object
   },
   computed: {
     totalOutputValue() {
+      if (!this.transaction.vout) return 0
       let totalOutputValue = 0
       for (const output of this.transaction.vout) {
         totalOutputValue += output.value
@@ -99,9 +100,11 @@ export default {
       return totalOutputValue
     },
     totalInputValue() {
+      if (!this.transaction.vin) return 0
       let totalInputValue = 0
       for (const input of this.transaction.vin) {
-        totalInputValue += input.tx.vout[input.vout].value
+        if (input.coinbase) continue
+        totalInputValue = input.tx.vout[input.vout].value
       }
       return totalInputValue
     },
