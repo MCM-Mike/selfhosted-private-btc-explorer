@@ -102,19 +102,20 @@ class BitcoinClient {
 
   // returns 10 latest blocks on the node
   async getLatestBlocks() {
-    const blockCount = await this.getBlockCount()
+    return this.getLatestBlocksOffset(0, 10)
+  }
 
-    if (blockCount < 1) return
+  async getLatestBlocksOffset(offset, numBlocks) {
+    const latestBlock = await this.getBlockCount()
 
-    let firstIndex = blockCount - 9
-    const lastIndex = blockCount
+    if (latestBlock < 1) return
 
-    if (firstIndex < 0) firstIndex = 0
+    const highestIndex = latestBlock - offset
+    const lowestIndex = highestIndex - numBlocks+1
 
-    const latestBlocks = await this.getBlockRange(firstIndex, lastIndex)
+    const blocks = await this.getBlockRange(lowestIndex, highestIndex)
 
-    // put newest block as first entry
-    return latestBlocks.reverse()
+    return blocks.reverse()
   }
 
   // mempool optional
