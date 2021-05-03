@@ -7,8 +7,8 @@
         </router-link>
       </h3>
     </div>
-    <div class="bg-white shadow overflow-hidden rounded-lg mt-2 px-4 py-4">
-      <div class="divide-y divide-gray-200 sm:divide-y-0 sm:grid sm:grid-cols-2 sm:gap-px">
+    <div class="bg-white shadow overflow-hidden rounded-lg mt-2 px-6 py-4">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div class="relative group bg-white">
           <div class="inline-flex items-center mb-2">
           <span class="pr-3 text-green-700">
@@ -21,27 +21,23 @@
           </span>
             Inputs
           </div>
-          <dl v-if="transaction" class="sm:divide-y sm:divide-gray-200">
-            <div v-for="(input, index) in transaction.vin" :key="index"
-                 class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt class="text-sm font-medium text-gray-500">
-                <router-link
-                    v-if="input.tx"
-                    :to="`/address/${input.tx.vout[input.vout].scriptPubKey.addresses[0]}`"
-                    class="text-green-500"
-                    :class="{'text-blue-500': input.tx.vout[input.vout].scriptPubKey.addresses[0] !== address}"
-                >
-                  {{ input.tx.vout[input.vout].scriptPubKey.addresses[0] }}
-                </router-link>
-                <span v-else>Coinbase (Newly Generated Coins)</span>
-              </dt>
-              <dd v-if="input.tx" class="mt-1 text-sm text-right text-gray-900 sm:mt-0 sm:col-span-2">
-                {{ input.tx.vout[input.vout].value }} BTC
-              </dd>
-            </div>
-          </dl>
+          <div v-for="(input, index) in transaction.vin" :key="index" class="py-1 table-fixed sm:grid sm:grid-cols-3 sm:gap-4">
+            <dl class="col-span-2 text-sm font-medium text-left text-gray-500 whitespace-nowrap overflow-hidden overflow-ellipsis">
+              <router-link
+                  v-if="input.tx"
+                  :to="`/address/${input.tx.vout[input.vout].scriptPubKey.addresses[0]}`"
+                  class="text-green-500"
+                  :class="{'text-blue-500': input.tx.vout[input.vout].scriptPubKey.addresses[0] !== address}"
+              >
+                {{ input.tx.vout[input.vout].scriptPubKey.addresses[0] }}
+              </router-link>
+              <div v-else>Coinbase (Newly Generated Coins)</div>
+            </dl>
+            <dd v-if="input.tx" class="col-span-1 text-sm font-medium text-right text-gray-900 sm:mt-0">
+              {{ input.tx.vout[input.vout].value }} BTC
+            </dd>
+          </div>
         </div>
-
         <div class="relative group bg-white">
           <div class="inline-flex items-center mb-2">
             Outputs
@@ -54,33 +50,30 @@
                                                  clip-rule="evenodd"></path></svg>
           </span>
           </div>
-          <dl v-if="transaction" class="sm:divide-y sm:divide-gray-200">
-            <div v-for="(output, index) in transaction.vout" :key="index"
-                 class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt class="text-sm font-medium text-gray-500">
-                <router-link
-                    v-if="output.scriptPubKey.hasOwnProperty('addresses')"
-                    :to="`/address/${output.scriptPubKey.addresses[0]}`"
-                    class="text-green-500"
-                    :class="{'text-blue-500': output.scriptPubKey.addresses[0] !== address}"
-                >
-                  {{ output.scriptPubKey.addresses[0] }}
-                </router-link>
-                <span v-else class="truncate">
+          <div v-for="(output, index) in transaction.vout" :key="index" class="py-1 table-fixed sm:grid sm:grid-cols-3 sm:gap-4">
+            <dl class="col-span-2 text-sm font-medium text-left text-gray-500 whitespace-nowrap overflow-hidden overflow-ellipsis">
+              <router-link
+                  v-if="output.scriptPubKey.hasOwnProperty('addresses')"
+                  :to="`/address/${output.scriptPubKey.addresses[0]}`"
+                  class="text-green-500"
+                  :class="{'text-blue-500': output.scriptPubKey.addresses[0] !== address}"
+              >
+                {{ output.scriptPubKey.addresses[0] }}
+              </router-link>
+              <div v-else class="whitespace-nowrap overflow-hidden overflow-ellipsis">
                 {{ output.scriptPubKey.asm }}
-              </span>
-              </dt>
-              <dd class="mt-1 text-sm text-right text-gray-900 sm:mt-0 sm:col-span-2">
-                {{ output.value }} BTC
-              </dd>
-            </div>
-          </dl>
+              </div>
+            </dl>
+            <dd class="col-span-1 text-sm font-medium text-right text-gray-900 sm:mt-0">
+              {{ output.value }} BTC
+            </dd>
+          </div>
         </div>
       </div>
-      <span v-if="transaction.vin && transaction.vin[0].txid" class="badge bg-red-100 text-red-800 float-left">
+      <span v-if="transaction.vin && transaction.vin[0].txid" class="mt-4 badge bg-red-100 text-red-800 float-left">
         Fee: {{ totalFees.toFixed(8) }} BTC
       </span>
-      <span class="badge bg-green-100 text-green-800 float-right">
+      <span class="mt-4 badge bg-green-100 text-green-800 float-right">
         Output: {{ totalOutputValue.toFixed(8) }} BTC
       </span>
     </div>

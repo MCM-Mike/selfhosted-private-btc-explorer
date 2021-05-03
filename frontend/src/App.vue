@@ -1,7 +1,7 @@
 <template>
   <div>
     <nav-bar />
-    <main class="w-11/12 xl:w-3/4 mx-auto my-4">
+    <main class="w-11/12 xl:w-3/4 mx-auto my-4" style="max-width: 1140px">
       <router-view />
     </main>
   </div>
