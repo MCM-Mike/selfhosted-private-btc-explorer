@@ -15,7 +15,7 @@ function socketIo(io) {
     socket.on('getAddressInfo', (address) => { getAddressInfo(socket, address) })
   })
 
-  bitcoinClient.updateCache(function () {
+  bitcoinClient.startCacheUpdater(function () {
     getBlockCount(io)
     getLatestBlocks(io)
     getLatestTransactions(io)

@@ -8,10 +8,12 @@ const PORT = process.env.RPC_PORT
 
 const URL = `http://${USER}:${PASS}@${HOST}:${PORT}/`
 
+const UPDATE_INTERVAL_MS = process.env.UPDATE_INTERVAL_MS || 10000
 const MAX_BLOCK_RANGE = process.env.MAX_BLOCK_RANGE || 20
 
 class BitcoinClient {
   electrumClient
+  updateInterval
   cache = {
     blockCount: 0, // block count of the node
     latestBlocks: [], // 10 latest blocks
@@ -22,6 +24,14 @@ class BitcoinClient {
   constructor() {
     this.electrumClient = new ElectrumClient()
     this.electrumClient.connect()
+  }
+
+  startCacheUpdater(callback) {
+    this.updateInterval = setInterval(() => { this.updateCache(callback) }, UPDATE_INTERVAL_MS)
+  }
+
+  stopCacheUpdater() {
+    this.updateInterval = null
   }
 
   async updateCache(callback) {
@@ -39,9 +49,6 @@ class BitcoinClient {
       callback()
     } catch (error) {
       console.log(error)
-    } finally {
-      // recursively update cache
-      this.updateCache(callback)
     }
   }
 
