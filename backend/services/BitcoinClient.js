@@ -7,7 +7,6 @@ const HOST = process.env.RPC_HOST
 const PORT = process.env.RPC_PORT
 
 const URL = `http://${USER}:${PASS}@${HOST}:${PORT}/`
-const headers = {'content-type': 'text/plain;'}
 
 const MAX_BLOCK_RANGE = process.env.MAX_BLOCK_RANGE || 20
 
@@ -34,8 +33,8 @@ class BitcoinClient {
 
       this.cache.blockCount = blockCount
       this.cache.latestBlocks = latestBlocks
-      this.cache.latestTransactions = latestTransactions
       this.cache.mempool = mempool
+      this.cache.latestTransactions = latestTransactions
 
       callback()
     } catch (error) {
@@ -46,41 +45,41 @@ class BitcoinClient {
     }
   }
 
-  // mempool optional
-  async getLatestTransactions(mempool) {
-    let latestTransactions = []
-
-    if (!mempool) mempool = await this.getRawMempool()
-
-    mempool = mempool.slice(0, 10)
-
-    for (let txHash of mempool) {
-      let tx = await this.electrumClient.getTransaction(txHash)
-      tx.info = await this.getMempoolEntry(txHash)
-      latestTransactions.push(tx)
-    }
-
-    return latestTransactions
-  }
-
   async getBlockCount() {
-    const dataString = '{"jsonrpc":"1.0","id":"curltext","method":"getblockcount","params":[]}'
-    return await this.rpcCall(dataString)
+    return await this.postRpcCommand('getblockcount')
   }
 
   async getBlock(hash) {
-    const dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getblock","params":["${hash}"]}`
-    let block = await this.rpcCall(dataString)
-    block.coinbasetx = await this.getRawTransaction(block.tx[0], block.hash)
-    return block
+    return await this.postRpcCommand('getblock', [hash])
   }
 
   async getBlockStats(hashOrIndex) {
-    let dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getblockstats","params":["${hashOrIndex}"]}`
-    if (isNumber(hashOrIndex)) dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getblockstats","params":[${hashOrIndex}]}`
-    return await this.rpcCall(dataString)
+    return await this.postRpcCommand('getblockstats', [hashOrIndex])
   }
 
+  async getBlockHash(index) {
+    index = parseInt(index)
+    return await this.postRpcCommand('getblockhash', [index])
+  }
+
+  async getMempoolInfo() {
+    return await this.postRpcCommand('getmempoolinfo')
+  }
+
+  async getRawMempool() {
+    return await this.postRpcCommand('getrawmempool')
+  }
+
+  // get mempool transaction
+  async getMempoolEntry(txHash) {
+    return await this.postRpcCommand('getmempoolentry', [txHash])
+  }
+
+  async getTransaction(txid) {
+    return await this.electrumClient.getTransaction(txid)
+  }
+
+  // get block range, indexes are both inclusive
   async getBlockRange(firstIndex, lastIndex) {
     if (firstIndex > lastIndex) return
     if (firstIndex < 0) return
@@ -114,53 +113,36 @@ class BitcoinClient {
 
     const latestBlocks = await this.getBlockRange(firstIndex, lastIndex)
 
+    // put newest block as first entry
     return latestBlocks.reverse()
   }
 
-  // returns amount of blocks by an offset
-  async getLatestBlocksOffset(offset, numBlocks) {
-    const latestBlock = await this.getBlockCount()
+  // mempool optional
+  async getLatestTransactions(mempool) {
+    const MAX_TRANSACTIONS = 10
+    let latestTransactions = []
 
-    if (latestBlock < 1) return
+    if (!mempool) mempool = await this.getRawMempool()
 
-    const highestIndex = latestBlock - offset+1
-    const lowestIndex = highestIndex - numBlocks-1
+    mempool = mempool.slice(0, 10)
 
-    const blocks = await this.getBlockRange(lowestIndex, highestIndex)
+    for (let txHash of mempool) {
+      let tx
 
-    return blocks.reverse()
-  }
+      try {
+        tx = await this.electrumClient.getTransaction(txHash)
+      } catch (error) {}
 
-  async getBlockHash(index) {
-    index = parseInt(index)
-    const dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getblockhash","params":[${index}]}`
-    return await this.rpcCall(dataString)
-  }
+      if (!tx) continue
 
-  async getMempoolInfo() {
-    const dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getmempoolinfo","params":[]}`
-    return await this.rpcCall(dataString)
-  }
+      tx.info = await this.getMempoolEntry(txHash)
 
-  async getRawMempool() {
-    const dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getrawmempool","params":[]}`
-    return await this.rpcCall(dataString)
-  }
+      latestTransactions.push(tx)
 
-  // get mempool transaction
-  async getMempoolEntry(txHash) {
-    const dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getmempoolentry","params":["${txHash}"]}`
-    return await this.rpcCall(dataString)
-  }
+      if (latestTransactions.length === MAX_TRANSACTIONS) break
+    }
 
-  async getRawTransaction(txid, blockHash) {
-    let dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getrawtransaction","params":["${txid}"]}`
-    if (blockHash) dataString = `{"jsonrpc":"1.0","id":"curltext","method":"getrawtransaction","params":["${txid}", 1, "${blockHash}"]}`
-    return await this.rpcCall(dataString)
-  }
-
-  async getTransaction(txid) {
-    return await this.electrumClient.getTransaction(txid)
+    return latestTransactions
   }
 
   async getTransactionAndInputs(txid) {
@@ -188,19 +170,23 @@ class BitcoinClient {
     }
   }
 
-  async rpcCall(dataString) {
+  // params must be an array
+  async postRpcCommand(method, params) {
+    if (!params || !Array.isArray(params)) params = []
     const options = {
       url: URL,
       method: 'POST',
-      headers,
-      data: dataString
+      headers: {'content-type': 'text/plain;'},
+      data: {"jsonrpc":"1.0","id":"curltext","method":method,"params":params}
     }
 
     let data;
 
     try {
       const response = await axios(options)
-      checkStatus200(response)
+      if (response.status !== 200) {
+        throw new Error('Bitcoin node unreachable')
+      }
       data = response.data.result
     } catch (error) {
       console.error(error)
@@ -208,16 +194,6 @@ class BitcoinClient {
 
     return data
   }
-}
-
-function checkStatus200(response) {
-  if (response.status !== 200) {
-    throw new Error('Bitcoin node unreachable')
-  }
-}
-
-function isNumber(string) {
-  return !isNaN(string)
 }
 
 module.exports = BitcoinClient
