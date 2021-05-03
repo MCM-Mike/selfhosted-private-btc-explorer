@@ -2,10 +2,8 @@
   <div class="grid gap-3">
     <AddressInfo :wallet="wallet" />
 
-    <div class="bg-white shadow overflow-hidden rounded-lg px-4 py-5">
-      <h2 class="text-lg font-medium text-gray-900">Transactions</h2>
-      <TransactionInputsAndOutputs v-for="(tx) in wallet.history" :txid="tx" :key="tx" />
-    </div>
+    <h2 class="text-lg font-medium text-gray-900">{{ wallet.history.length }} Transactions</h2>
+    <TransactionInputsAndOutputs v-for="(tx) in wallet.history" :txid="tx" :key="tx" :address="wallet.address" />
   </div>
 </template>
 
