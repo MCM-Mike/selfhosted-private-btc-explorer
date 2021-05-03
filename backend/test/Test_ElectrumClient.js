@@ -21,6 +21,8 @@ describe('Test_ElectrumClient', function () {
 
     describe('Test_GetBalance_Balance', function () {
         it('should return object with confirmed and unconfirmed key', async function () {
+            // this test can take up to 20 seconds
+            this.timeout(20000);
             await electrumClient.connect()
 
             const balance = await electrumClient.getBalance('3MRJtMhE7KNBmeAt9XeS3bBjUb5VeHd6wD')
@@ -34,6 +36,8 @@ describe('Test_ElectrumClient', function () {
 
     describe('Test_GetTransaction_Transaction', function () {
         it('should return transaction', async function () {
+            // this test can take up to 20 seconds
+            this.timeout(20000);
             await electrumClient.connect()
             const txid = '03a6f25941e6f0896ff949c5fe82a8cb168ef38b916ee83f6423ca9229a3b604'
 
