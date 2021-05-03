@@ -110,10 +110,10 @@ export default {
       return totalInputValue
     },
     totalFees() {
-      return this.totalInputValue - this.totalOutputValue
+      return this.transaction?.vin[0]?.coinbase ? 0 : (this.totalInputValue - this.totalOutputValue)
     },
     feesPerVByte() {
-      return this.totalFees / this.transaction.vsize
+      return this.transaction?.vin[0]?.coinbase ? 0 : (this.totalFees / this.transaction.vsize)
     }
   },
   methods: {
