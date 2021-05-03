@@ -118,7 +118,7 @@ export default {
   },
   methods: {
     copyTransactionId() {
-      navigator.clipboard.writeText(this.transactionId).then(function () {
+      navigator.clipboard.writeText(this.transaction.txid).then(function () {
         console.log('Async: Copying to clipboard was successful!');
       }, function (err) {
         console.error('Async: Could not copy text: ', err);

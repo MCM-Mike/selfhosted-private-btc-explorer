@@ -23,26 +23,11 @@
       <dl class="sm:divide-y sm:divide-gray-200">
         <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
           <dt class="text-sm font-medium text-gray-500">
-            Total received
-          </dt>
-          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-            {{ wallet.received }} BTC
-          </dd>
-        </div>
-        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-          <dt class="text-sm font-medium text-gray-500">
-            Total sent
-          </dt>
-          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-            {{ wallet.sent }} BTC
-          </dd>
-        </div>
-        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-          <dt class="text-sm font-medium text-gray-500">
             Current balance
           </dt>
           <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-            {{ wallet.balance / 100000000 }} BTC
+            {{ wallet.balance.confirmed / 100000000 }} BTC
+            <span class="text-gray-600">({{ wallet.balance.unconfirmed / 100000000 }} BTC Unconfirmed)</span>
           </dd>
         </div>
       </dl>
@@ -63,7 +48,7 @@ export default {
   },
   methods: {
     copyTransactionId() {
-      navigator.clipboard.writeText(this.transactionId).then(function () {
+      navigator.clipboard.writeText(this.wallet.address).then(function () {
         console.log('Async: Copying to clipboard was successful!');
       }, function (err) {
         console.error('Async: Could not copy text: ', err);

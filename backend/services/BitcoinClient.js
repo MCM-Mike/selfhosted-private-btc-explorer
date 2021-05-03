@@ -161,7 +161,7 @@ class BitcoinClient {
 
     return {
       address: address,
-      balance: balance.confirmed,
+      balance: balance,
       history: history.map((tx) => tx.tx_hash)
     }
   }
