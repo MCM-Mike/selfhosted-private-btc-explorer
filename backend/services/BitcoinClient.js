@@ -89,7 +89,7 @@ class BitcoinClient {
   // get block range, indexes are both inclusive
   async getBlockRange(firstIndex, lastIndex) {
     if (firstIndex > lastIndex) return
-    if (firstIndex < 0) return
+    if (firstIndex < 0) firstIndex = 0
     if ((lastIndex - firstIndex) > MAX_BLOCK_RANGE) lastIndex = firstIndex + MAX_BLOCK_RANGE - 1
 
     let blocks = []
@@ -136,7 +136,7 @@ class BitcoinClient {
       let tx
 
       try {
-        tx = await this.getTransactionAndInputs(txHash)
+        tx = await this.getTransactionWithValueData(txHash)
       } catch (error) {}
 
       if (!tx) continue
@@ -149,16 +149,32 @@ class BitcoinClient {
     return latestTransactions
   }
 
-  async getTransactionAndInputs(txid) {
+  async getTransactionWithValueData(txid) {
     let tx = await this.getTransaction(txid)
 
     if (!tx) return undefined
 
-    for (let index = 0; index < tx.vin.length; index++) {
-      if (tx.vin[index].coinbase || !tx.vin[index].txid) continue
+    tx.inputValue = 0
+    tx.outputValue = 0
+
+    for (const input of tx.vin) {
+      if (input.coinbase) {
+        tx.coinbase = true
+        continue
+      }
       // get input transaction so that we can calculate the value in the frontend
-      tx.vin[index].tx = await this.getTransaction(tx.vin[index].txid)
+      const inputTx = await this.getTransaction(input.txid)
+      input.value = inputTx.vout[input.vout].value
+      input.address = inputTx.vout[input.vout].scriptPubKey.addresses[0]
+      tx.inputValue += input.value
     }
+
+    for (const output of tx.vout) {
+      tx.outputValue += output.value
+    }
+
+    tx.fee = tx.inputValue - tx.outputValue
+    tx.feeRate = tx.fee / tx.vsize
 
     return tx
   }

@@ -63,7 +63,7 @@ async function getTransaction(socket, hash) {
 }
 
 async function getTransactionInputs(socket, hash) {
-  const transaction = await bitcoinClient.getTransactionAndInputs(hash)
+  const transaction = await bitcoinClient.getTransactionWithValueData(hash)
   socket.emit('transaction', transaction)
 }
 

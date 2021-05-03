@@ -24,17 +24,17 @@
           <div v-for="(input, index) in transaction.vin" :key="index" class="py-1 table-fixed sm:grid sm:grid-cols-3 sm:gap-4">
             <dl class="col-span-2 text-sm font-medium text-left text-gray-500 whitespace-nowrap overflow-hidden overflow-ellipsis">
               <router-link
-                  v-if="input.tx"
-                  :to="`/address/${input.tx.vout[input.vout].scriptPubKey.addresses[0]}`"
+                  v-if="input.txid"
+                  :to="`/address/${input.address}`"
                   class="text-green-500"
-                  :class="{'text-blue-500': input.tx.vout[input.vout].scriptPubKey.addresses[0] !== address}"
+                  :class="{'text-blue-500': input.address !== address}"
               >
-                {{ input.tx.vout[input.vout].scriptPubKey.addresses[0] }}
+                {{ input.address }}
               </router-link>
               <div v-else>Coinbase (Newly Generated Coins)</div>
             </dl>
-            <dd v-if="input.tx" class="col-span-1 text-sm font-medium text-right text-gray-900 sm:mt-0">
-              {{ input.tx.vout[input.vout].value }} BTC
+            <dd v-if="input.txid" class="col-span-1 text-sm font-medium text-right text-gray-900 sm:mt-0">
+              {{ input.value }} BTC
             </dd>
           </div>
         </div>
@@ -70,11 +70,17 @@
           </div>
         </div>
       </div>
-      <span v-if="transaction.vin && transaction.vin[0].txid" class="mt-4 badge bg-red-100 text-red-800 float-left">
-        Fee: {{ totalFees.toFixed(8) }} BTC
+      <span v-if="transaction.inputValue" class="mt-4 badge bg-red-100 text-red-800 float-left">
+        Input: {{ (transaction.inputValue).toFixed(8) }} BTC
       </span>
-      <span class="mt-4 badge bg-green-100 text-green-800 float-right">
-        Output: {{ totalOutputValue.toFixed(8) }} BTC
+      <span v-if="transaction.fee && !transaction.coinbase" class="ml-1 mt-4 badge bg-yellow-100 text-yellow-800 float-left">
+        Fee: {{ (transaction.fee).toFixed(8) }} BTC
+      </span>
+      <span v-if="transaction.feeRate && !transaction.coinbase" class="ml-1 mt-4 badge bg-yellow-100 text-yellow-800 float-left">
+        Fee: {{ (transaction.feeRate * 100000000).toFixed(2) }} sat/vB
+      </span>
+      <span v-if="transaction.outputValue" class="mt-4 badge bg-green-100 text-green-800 float-right">
+        Output: {{ (transaction.outputValue).toFixed(8) }} BTC
       </span>
     </div>
   </div>
@@ -86,41 +92,15 @@ export default {
   name: 'TransactionInputsAndOutputs',
   data: () => ({
     transaction: {},
-    totalOutputValue: 0,
-    totalInputValue: 0,
-    totalFees: 0
   }),
   props: {
     txid: String,
     address: String
   },
-  methods: {
-    calcTotalOutputValue() {
-      let totalOutputValue = 0
-      for (const output of this.transaction.vout) {
-        totalOutputValue += output.value
-      }
-      this.totalOutputValue = totalOutputValue
-    },
-    calcTotalInputValue() {
-      let totalInputValue = 0
-      for (let index = 0; index < this.transaction.vin.length; index++) {
-        if (this.transaction.vin[index].coinbase || !this.transaction.vin[index].txid) continue
-        totalInputValue += this.transaction.vin[index].tx.vout[this.transaction.vin[index].vout].value
-      }
-      this.totalInputValue = totalInputValue
-    },
-    calcTotalFees() {
-      this.totalFees = this.totalInputValue - this.totalOutputValue
-    }
-  },
   created() {
     socket.on('transaction', (data) => {
       if (data?.txid === this.txid) {
         this.transaction = data;
-        this.calcTotalOutputValue()
-        this.calcTotalInputValue()
-        this.calcTotalFees()
       }
     })
   },

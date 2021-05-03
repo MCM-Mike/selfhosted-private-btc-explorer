@@ -32,7 +32,7 @@
             Fee
           </dt>
           <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-            {{ totalFees }} BTC
+            {{ transaction.coinbase ? 0 : transaction.fee }} BTC
           </dd>
         </div>
         <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -40,7 +40,7 @@
             Fee Rate
           </dt>
           <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-            {{ (feesPerVByte * 100000000).toFixed(2) }} sat/vB
+            {{ transaction.coinbase ? 0 : (transaction.feeRate * 100000000).toFixed(2) }} sat/vB
             <!-- <span class="badge bg-green-100 text-green-800">Optimal</span> -->
           </dd>
         </div>
@@ -91,29 +91,6 @@ export default {
   computed: {
     date() {
       return `${new Date(this.transaction.time * 1000).toLocaleDateString()}, ${new Date(this.transaction.time * 1000).toLocaleTimeString()}`
-    },
-    totalOutputValue() {
-      if (!this.transaction.vout) return 0
-      let totalOutputValue = 0
-      for (const output of this.transaction.vout) {
-        totalOutputValue += output.value
-      }
-      return totalOutputValue
-    },
-    totalInputValue() {
-      if (!this.transaction.vin) return 0
-      let totalInputValue = 0
-      for (const input of this.transaction.vin) {
-        if (input.coinbase) continue
-        totalInputValue += input.tx.vout[input.vout].value
-      }
-      return totalInputValue
-    },
-    totalFees() {
-      return this.transaction?.vin[0]?.coinbase ? 0 : (this.totalInputValue - this.totalOutputValue)
-    },
-    feesPerVByte() {
-      return this.transaction?.vin[0]?.coinbase ? 0 : (this.totalFees / this.transaction.vsize)
     }
   },
   methods: {
