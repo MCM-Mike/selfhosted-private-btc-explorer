@@ -1,19 +1,18 @@
 <template>
   <div class="grid gap-3">
-    <TransactionDetails :transaction="transaction"/>
+    <TransactionInfo :transaction="transaction"/>
     <TransactionInputsAndOutputs :txid="$route.params.id" />
   </div>
 </template>
 
 <script>
-import TransactionDetails from "../components/TransactionInfo";
+import TransactionInfo from "../components/TransactionInfo";
 import socket from "@/plugins/socket.io";
 import TransactionInputsAndOutputs from "@/components/TransactionInputsAndOutputs";
 
-
 export default {
   name: "transaction",
-  components: {TransactionDetails, TransactionInputsAndOutputs},
+  components: {TransactionInfo, TransactionInputsAndOutputs},
   methods: {},
   data: () => ({
     transaction: {}

@@ -22,10 +22,8 @@
           </svg>
         </p>
       </div>
-      <p class="text-gray-500" v-if="transaction.time">{{ new Intl.DateTimeFormat('default', {
-        dateStyle: 'medium',
-        timeStyle: 'medium'
-      }).format(new Date(transaction.time * 1000)) }} ({{ timeSince(new Date(transaction.time * 1000)) }} ago)</p>
+      <p v-if="transaction.time" class="text-gray-500">{{ date }} ({{ timeSince(new Date(transaction.time * 1000)) }} ago)</p>
+      <p v-else class="text-red-500 italic">In mempool</p>
     </div>
     <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
       <dl class="sm:divide-y sm:divide-gray-200">
@@ -37,15 +35,15 @@
             {{ totalFees }} BTC
           </dd>
         </div>
-<!--        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">-->
-<!--          <dt class="text-sm font-medium text-gray-500">-->
-<!--            Fee Rate-->
-<!--          </dt>-->
-<!--          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">-->
-<!--            68.5 sat/vB-->
-<!--            <span class="badge bg-green-100 text-green-800">Optimal</span>-->
-<!--          </dd>-->
-<!--        </div>-->
+        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">
+            Fee Rate
+          </dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            {{ (feesPerVByte * 100000000).toFixed(2) }} sat/vB
+            <!-- <span class="badge bg-green-100 text-green-800">Optimal</span> -->
+          </dd>
+        </div>
         <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
           <dt class="text-sm font-medium text-gray-500">
             Size
@@ -91,6 +89,9 @@ export default {
     transaction: Object
   },
   computed: {
+    date() {
+      return `${new Date(this.transaction.time * 1000).toLocaleDateString()}, ${new Date(this.transaction.time * 1000).toLocaleTimeString()}`
+    },
     totalOutputValue() {
       if (!this.transaction.vout) return 0
       let totalOutputValue = 0
@@ -110,6 +111,9 @@ export default {
     },
     totalFees() {
       return this.totalInputValue - this.totalOutputValue
+    },
+    feesPerVByte() {
+      return this.totalFees / this.transaction.vsize
     }
   },
   methods: {
