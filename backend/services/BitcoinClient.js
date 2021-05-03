@@ -124,18 +124,14 @@ class BitcoinClient {
 
     if (!mempool) mempool = await this.getRawMempool()
 
-    mempool = mempool.slice(0, 10)
-
     for (let txHash of mempool) {
       let tx
 
       try {
-        tx = await this.electrumClient.getTransaction(txHash)
+        tx = await this.getTransactionAndInputs(txHash)
       } catch (error) {}
 
       if (!tx) continue
-
-      tx.info = await this.getMempoolEntry(txHash)
 
       latestTransactions.push(tx)
 
