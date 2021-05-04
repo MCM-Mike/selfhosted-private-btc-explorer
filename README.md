@@ -6,6 +6,7 @@ Frontend is done with Vue, while the backend is built on Node.js. Communication 
 ### Prerequisites
 1. Setup and run your own Bitcoind node.
 2. Setup and run your own Electrum(X) node and connect it to your Bitcoind node.
+3. Make sure you run teh latest Node JS LTS version (14.16.1)
 
 ### Setting up the backend
 1. Clone the project folder and open it.
