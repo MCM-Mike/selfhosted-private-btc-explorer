@@ -50,6 +50,11 @@ The frontend is a static page located in the /dist folder in the frontend direct
 
 Pre-final version
 
+## Future ideas
+1. Show sent/received in address view.
+2. Display additional data in coinbase transactions (decrypted OP_RETURN etc..).
+3. Show realtime data when viewing address/transaction/block and give user feedback when the data updates (play sound on confirmation etc..). 
+4. User configurable dashboard with various widgets. Like an account/address tracker widget.
 
 ## SUPPORT
 For support, contact: mick@dutchbits.nl
