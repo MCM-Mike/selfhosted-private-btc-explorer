@@ -1,13 +1,13 @@
 <template>
   <div>
-    <div class="bg-white shadow overflow-hidden rounded-lg px-4 py-2">
+    <div class="bg-white overflow-hidden rounded-lg px-4 py-2">
       <h3 class="text-sm leading-6 font-medium text-gray-900">
-        <router-link :to="`/transactions/${transaction.txid}`" class="text-blue-500 break-words">
+        <router-link :to="`/transactions/${transaction.txid}`" class="text-bitcoin-500 break-words">
           {{ transaction.txid }}
         </router-link>
       </h3>
     </div>
-    <div class="bg-white shadow overflow-hidden rounded-lg mt-2 px-6 py-4">
+    <div class="bg-white overflow-hidden rounded-lg mt-2 px-6 py-4">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div class="relative group bg-white">
           <div class="inline-flex items-center mb-2">
@@ -26,8 +26,8 @@
               <router-link
                   v-if="input.txid"
                   :to="`/address/${input.address}`"
-                  class="text-green-500"
-                  :class="{'text-blue-500': input.address !== address}"
+                  class="text-blue-500"
+                  :class="{'text-bitcoin-500': input.address === address}"
               >
                 {{ input.address }}
               </router-link>
@@ -55,8 +55,8 @@
               <router-link
                   v-if="output.scriptPubKey.hasOwnProperty('addresses')"
                   :to="`/address/${output.scriptPubKey.addresses[0]}`"
-                  class="text-green-500"
-                  :class="{'text-blue-500': output.scriptPubKey.addresses[0] !== address}"
+                  class="text-blue-500"
+                  :class="{'text-bitcoin-500': output.scriptPubKey.addresses[0] === address}"
               >
                 {{ output.scriptPubKey.addresses[0] }}
               </router-link>

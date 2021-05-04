@@ -1,9 +1,9 @@
 <template>
   <!-- This example requires Tailwind CSS v2.0+ -->
-  <div class="flex items-center justify-between border-t border-gray-200">
+  <div class="flex items-center justify-between">
     <div class="flex-1 flex items-center sm:justify-between justify-end">
       <div class="hidden sm:block">
-        <p class="text-sm text-gray-700">
+        <p class="text-sm text-bitcoin-700">
           Showing
           <span class="font-medium">{{ (currentPage * pageSize) - pageSize }}</span>
           to
@@ -14,9 +14,9 @@
         </p>
       </div>
       <div>
-        <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+        <nav class="relative z-0 inline-flex rounded-md -space-x-px" aria-label="Pagination">
           <a @click="goToFirstPage"
-             class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+             class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-bitcoin-300 bg-white text-sm font-medium text-bitcoin-500 hover:bg-bitcoin-50">
             <span class="sr-only">Previous</span>
             <!-- Heroicon name: solid/chevron-double-left -->
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -27,7 +27,7 @@
           </a>
           <button
               @click="goToPrevPage"
-             class="relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+             class="relative inline-flex items-center px-2 py-2 border border-bitcoin-300 bg-white text-sm font-medium text-bitcoin-500 hover:bg-bitcoin-50">
             <span class="sr-only">Previous</span>
             <!-- Heroicon name: solid/chevron-left -->
             <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
@@ -45,7 +45,7 @@
               1
             </button>
             <span
-                class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
+                class="relative inline-flex items-center px-4 py-2 border border-bitcoin-300 bg-white text-sm font-medium text-bitcoin-700">
               ...
             </span>
           </template>
@@ -77,7 +77,7 @@
 
           <template v-if="currentPage < totalPages-3">
             <span
-                class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
+                class="relative inline-flex items-center px-4 py-2 border border-bitcoin-300 bg-white text-sm font-medium text-bitcoin-700">
               ...
             </span>
             <button
@@ -97,7 +97,7 @@
 
           <button
               @click="goToNextPage"
-             class="relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+             class="relative inline-flex items-center px-2 py-2 border border-bitcoin-300 bg-white text-sm font-medium text-bitcoin-500 hover:bg-bitcoin-50">
             <span class="sr-only">Next</span>
             <!-- Heroicon name: solid/chevron-right -->
             <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
@@ -109,7 +109,7 @@
           </button>
           <button
               @click="goToLastPage"
-             class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+             class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-bitcoin-300 bg-white text-sm font-medium text-bitcoin-500 hover:bg-bitcoin-50">
             <span class="sr-only">Next</span>
             <!-- Heroicon name: solid/chevron-double-right -->
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -170,10 +170,10 @@ export default {
 
 <style scoped>
 .page-button {
-  @apply relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-100;
+  @apply relative inline-flex items-center px-4 py-2 border border-bitcoin-300 bg-white text-sm font-medium text-bitcoin-700 hover:bg-bitcoin-100;
 }
 
 .page-button[disabled] {
-  @apply bg-gray-200;
+  @apply bg-bitcoin-200;
 }
 </style>

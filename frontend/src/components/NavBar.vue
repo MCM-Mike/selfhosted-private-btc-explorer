@@ -1,5 +1,5 @@
 <template>
-  <nav class="bg-gray-800">
+  <nav class="bg-bitcoin-500">
     <div class="lg:w-4/5 mx-auto px-2 sm:px-4 lg:px-8">
       <div class="relative flex items-center justify-between h-16">
         <div class="flex items-center px-2 lg:px-0">
@@ -71,10 +71,10 @@ export default {
 
 <style scoped>
 .nav-link:not(.router-link-active) {
-  @apply text-gray-300 hover:bg-gray-700 hover:text-white;
+  @apply text-white font-bold hover:bg-bitcoin-600 hover:text-white;
 }
 .nav-link.router-link-active {
-  @apply bg-gray-900 text-white;
+  @apply bg-bitcoin-600 text-white;
 }
 
 .mobile-nav:not(.router-link-active) {

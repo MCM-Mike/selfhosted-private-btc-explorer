@@ -14,7 +14,7 @@
         </div>
         <form @submit.prevent="search">
           <input id="search" name="search"
-                 class="block w-full pl-10 pr-3 py-2 border border-transparent rounded-md leading-5 bg-gray-700 text-gray-300 placeholder-gray-400 focus:outline-none focus:bg-gray-200 focus:border-white focus:ring-white focus:text-gray-900 sm:text-sm"
+                 class="block w-full pl-10 pr-3 py-2 border border-transparent rounded-md leading-5 text-gray-300 placeholder-gray-400 focus:outline-none focus:border-white focus:ring-white focus:text-gray-900 sm:text-sm"
                  placeholder="Hash or Address" type="search" v-model="query"
           >
         </form>

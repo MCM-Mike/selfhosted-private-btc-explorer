@@ -2,7 +2,7 @@
   <div class="grid gap-3">
     <AddressInfo :wallet="wallet" />
 
-    <h2 class="text-lg font-medium text-gray-900">{{ wallet.history.length }} Transactions</h2>
+    <h2 class="text-lg font-medium text-bitcoin-900">{{ wallet.history.length }} Transactions</h2>
     <Pagination
         v-if="wallet.history.length > 20"
         :current-page.sync="currentPage"

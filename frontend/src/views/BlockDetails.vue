@@ -2,7 +2,7 @@
   <div class="grid gap-6">
     <BlockInfo v-if="blockStats" :block-stats="blockStats"/>
 
-    <h2 class="text-lg font-medium text-gray-900">{{ block.tx.length }} Transactions</h2>
+    <h2 class="text-lg font-medium text-bitcoin-900">{{ block.tx.length }} Transactions</h2>
     <Pagination :current-page.sync="currentPage" :total-pages="totalPages" :total-results="block.tx.length || 0" page-size="20" />
     <TransactionInputsAndOutputs v-for="tx in pageData" :key="tx" :txid="tx" />
     <Pagination :current-page.sync="currentPage" :total-pages="totalPages" :total-results="block.tx.length || 0" page-size="20" />

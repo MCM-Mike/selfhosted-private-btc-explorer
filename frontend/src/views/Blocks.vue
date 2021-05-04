@@ -1,5 +1,7 @@
 <template>
-  <div class="bg-white shadow overflow-hidden rounded-lg px-4 py-5 relative">
+  <div>
+    <div class="px-6 py-4 bg-white rounded-lg overflow-hidden relative">
+
     <div v-if="isLoading" class="loading flex justify-center items-center">
       <svg class="animate-spin h-8 w-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -7,9 +9,31 @@
       </svg>
     </div>
 
-    <h2 class="text-lg font-medium text-gray-900">Blocks</h2>
-    <BlockTable :blocks="blocks" :fixed="false" />
+    <h2 class="text-lg font-medium text-bitcoin-900 py-1">Blocks</h2>
+    <table class="table-fixed break-words w-full">
+      <thead>
+      <tr class="text-xs text-gray-400 uppercase tracking-wider">
+        <th scope="col" class="w-2/12 py-3 font-medium text-left">
+          Height
+        </th>
+        <th scope="col" class="w-4/12 py-3 font-medium text-left">
+          Mined
+        </th>
+        <th scope="col" class="w-0 invisible md:visible md:w-4/12 py-3 font-medium text-right">
+          TXs
+        </th>
+        <th scope="col" class="w-2/12 py-3 font-medium text-right">
+          Size
+        </th>
+      </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-100">
+      <LatestBlocksEntry v-for="block in blocks" :key="block.height" :block="block" />
+      </tbody>
+    </table>
+  </div>
     <Pagination
+        class="mt-2"
         :current-page.sync="currentPage"
         :page-size="pageSize"
         :total-results="totalBlockCount"
@@ -20,12 +44,12 @@
 
 <script>
 import Pagination from "@/components/Pagination";
-import BlockTable from "@/components/BlockTable";
+import LatestBlocksEntry from "@/components/LatestBlocksEntry";
 import socket from '../plugins/socket.io'
 
 export default {
   name: "Blocks",
-  components: {BlockTable, Pagination},
+  components: {LatestBlocksEntry, Pagination},
   created() {
     socket.emit('getLatestBlocksOffset', 0);
     socket.emit('getBlockCount');

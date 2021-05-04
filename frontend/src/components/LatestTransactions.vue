@@ -1,22 +1,22 @@
 <template>
-  <div class="bg-white shadow overflow-hidden sm:rounded-md">
-    <h2 class="text-lg font-medium text-gray-900 px-4 py-5 border-b">Latest transactions</h2>
+  <div class="px-6 py-4 bg-white rounded-lg overflow-hidden">
+    <h2 class="text-lg font-medium text-bitcoin-900 py-1">Latest Transactions</h2>
 
-    <table class="table-fixed divide-y divide-gray-200 break-words w-full">
-      <thead class="bg-gray-50">
-      <tr>
-        <th scope="col" class="w-2/4 px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-          TX
-        </th>
-        <th scope="col" class="w-1/4 px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-          Value (BTC)
-        </th>
-        <th scope="col" class="w-1/4 px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-          Fee
-        </th>
-      </tr>
+    <table class="table-fixed break-words w-full">
+      <thead>
+        <tr class="text-xs text-gray-400 uppercase tracking-wider">
+          <th scope="col" class="w-2/4 py-3 font-medium text-left">
+            TX
+          </th>
+          <th scope="col" class="w-1/4 py-3 font-medium text-right">
+            Value (BTC)
+          </th>
+          <th scope="col" class="w-1/4 py-3 font-medium text-right">
+            Fee
+          </th>
+        </tr>
       </thead>
-      <tbody class="bg-white divide-y divide-gray-200">
+      <tbody class="divide-y divide-gray-100">
       <LatestTransactionsEntry v-for="(transaction, index) in transactions" :key="index" :transaction="transaction" />
       </tbody>
     </table>

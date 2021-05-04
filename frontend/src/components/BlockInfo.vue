@@ -1,16 +1,16 @@
 <template>
-  <div class="bg-white shadow overflow-hidden rounded-lg">
-    <div class="px-4 py-5 flex justify-between sm:px-6">
+  <div class="px-10 py-2 bg-white overflow-hidden rounded-lg">
+    <div class="py-5 flex justify-between">
       <div>
-        <h3 class="text-lg leading-6 font-medium text-gray-900">
+        <h3 class="text-lg leading-6 font-medium text-bitcoin-500">
           Block #{{ blockStats.height }}
         </h3>
       </div>
       <p class="text-gray-500">{{ date }} ({{ timeSince(new Date(blockStats.time * 1000)) }} ago)</p>
     </div>
-    <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
-      <dl class="sm:divide-y sm:divide-gray-200">
-        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+    <div class="border-t border-gray-100 py-5 sm:p-0">
+      <dl class="divide-y divide-gray-100">
+        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
           <dt class="text-sm font-medium text-gray-500">
             Hash
           </dt>
@@ -18,7 +18,7 @@
             {{ blockStats.blockhash }}
           </dd>
         </div>
-        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
           <dt class="text-sm font-medium text-gray-500">
             Total fees
           </dt>
@@ -26,7 +26,7 @@
             {{ (blockStats.totalfee / 1000000000).toFixed(4) }} BTC
           </dd>
         </div>
-        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
           <dt class="text-sm font-medium text-gray-500">
             Subsidy
           </dt>
@@ -34,7 +34,7 @@
             {{ ((blockStats.subsidy) / 1000000000).toFixed(4) }} BTC
           </dd>
         </div>
-        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
           <dt class="text-sm font-medium text-gray-500">
             Subsidy + fees
           </dt>
@@ -42,7 +42,7 @@
             {{ ((blockStats.totalfee + blockStats.subsidy) / 1000000000).toFixed(4) }} BTC
           </dd>
         </div>
-        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
           <dt class="text-sm font-medium text-gray-500">
             Size
           </dt>
@@ -50,7 +50,7 @@
             {{ fileSize(blockStats.total_size) }}
           </dd>
         </div>
-        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
           <dt class="text-sm font-medium text-gray-500">
             Weight
           </dt>

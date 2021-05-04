@@ -1,6 +1,6 @@
 <template>
-  <div class="bg-white shadow overflow-hidden rounded-lg">
-    <div class="px-4 py-5 flex justify-between sm:px-6">
+  <div class="px-10 py-2 bg-white overflow-hidden rounded-lg">
+    <div class="py-5 flex justify-between">
       <div>
         <h3 class="text-lg leading-6 font-medium text-gray-900">
           Address
@@ -8,7 +8,7 @@
           <span class="badge uppercase" :class="bech32 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">bech32</span>
         </h3>
         <p @click="copyTransactionId"
-           class="transaction-id cursor-pointer inline-flex justify-center items-center mt-1 max-w-2xl text-sm text-blue-500">
+           class="transaction-id cursor-pointer inline-flex justify-center items-center mt-1 max-w-2xl text-sm font-bold text-bitcoin-500">
           {{ wallet.address }}
           <svg class="hidden mx-2 w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20"
                xmlns="http://www.w3.org/2000/svg">
@@ -19,9 +19,9 @@
         </p>
       </div>
     </div>
-    <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
-      <dl class="sm:divide-y sm:divide-gray-200">
-        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+    <div class="border-t border-gray-100 py-5 sm:p-0">
+      <dl class="divide-y divide-gray-100">
+        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
           <dt class="text-sm font-medium text-gray-500">
             Current balance
           </dt>

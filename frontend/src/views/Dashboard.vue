@@ -1,16 +1,16 @@
 <template>
-  <div class="w-full overflow-hidden grid-cols-3">
+  <div class="w-full grid-cols-3">
     <!-- WIP
     <AverageFees />
     -->
 
     <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3">
-      <div class="bg-white overflow-hidden shadow rounded-lg col-span-1">
+      <div class="bg-white overflow-hidden rounded-lg col-span-1">
         <div class="px-4 py-5 sm:p-6">
           <h4>Incoming transaction chart</h4>
         </div>
       </div>
-      <div class="bg-white overflow-hidden shadow rounded-lg col-span-1">
+      <div class="bg-white overflow-hidden rounded-lg col-span-1">
         <div class="px-4 py-5 sm:p-6">
           <Mempool />
         </div>
