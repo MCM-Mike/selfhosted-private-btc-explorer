@@ -45,6 +45,7 @@ class ElectrumClient {
         return await this.rpcCall('blockchain.scripthash.get_balance', [scriptHash])
     }
 
+    // "history too large": As a workaround, consider starting electrum with a custom --txid-limit argument, to support longer transaction histories.
     async getHistory(address) {
         const scriptHash = this.getScriptHash(address)
         return await this.rpcCall('blockchain.scripthash.get_history', [scriptHash])

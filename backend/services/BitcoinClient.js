@@ -181,12 +181,18 @@ class BitcoinClient {
 
   async getAddressInfo(address) {
     const balance = await this.electrumClient.getBalance(address)
-    const history = await this.electrumClient.getHistory(address)
+    let history = await this.electrumClient.getHistory(address)
+
+    if (!history) {
+      history = 0
+    } else {
+      history = history.map((tx) => tx.tx_hash)
+    }
 
     return {
       address: address,
       balance: balance,
-      history: history.map((tx) => tx.tx_hash)
+      history: history
     }
   }
 

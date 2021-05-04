@@ -10,7 +10,11 @@
         :total-results="wallet.history.length || 0"
         page-size="20"
     />
-    <TransactionInputsAndOutputs v-for="tx in pageData" :txid="tx" :key="tx" :address="wallet.address" />
+    <TransactionInputsAndOutputs v-for="tx in transactionsOnPage" :txid="tx" :key="tx" :address="wallet.address" />
+    <div v-if="wallet.history === 0" class="py-5 px-10 bg-white rounded-lg">
+      <h2 class="text-lg font-medium text-bitcoin-500">History too large.</h2>
+      <span class="text-gray-500">As a workaround, consider starting electrum with a custom --txid-limit argument, to support longer transaction histories.</span>
+    </div>
     <Pagination
         v-if="wallet.history.length > 20"
         :current-page.sync="currentPage"
@@ -41,8 +45,8 @@ name: "AddressDetails",
     totalPages() {
       return Math.ceil(this.wallet.history.length / 20)
     },
-    pageData() {
-      return this.wallet?.history.slice((this.currentPage * 20) - 20, this.currentPage * 20);
+    transactionsOnPage() {
+      return (this.wallet?.history === 0) ? 0 : this.wallet?.history.slice((this.currentPage * 20) - 20, this.currentPage * 20);
     }
   },
   created() {
