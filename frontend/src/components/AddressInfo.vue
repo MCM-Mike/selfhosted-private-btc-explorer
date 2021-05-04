@@ -25,7 +25,7 @@
           <dt class="text-sm font-medium text-gray-500">
             Current balance
           </dt>
-          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <dd class="mt-1 text-sm sm:mt-0 sm:col-span-2">
             {{ wallet.balance.confirmed / 100000000 }} BTC
             <span class="text-gray-600">({{ wallet.balance.unconfirmed / 100000000 }} BTC Unconfirmed)</span>
           </dd>

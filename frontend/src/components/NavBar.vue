@@ -71,16 +71,16 @@ export default {
 
 <style scoped>
 .nav-link:not(.router-link-active) {
-  @apply text-white font-bold hover:bg-bitcoin-600 hover:text-white;
+  @apply text-white font-bold hover:bg-bitcoin-400 hover:text-white;
 }
 .nav-link.router-link-active {
-  @apply bg-bitcoin-600 text-white;
+  @apply text-white font-bold bg-bitcoin-400;
 }
 
 .mobile-nav:not(.router-link-active) {
-  @apply text-white hover:bg-bitcoin-600 hover:text-white;
+  @apply text-white hover:bg-bitcoin-400 hover:text-white;
 }
 .mobile-nav.router-link-active {
-  @apply bg-bitcoin-600 text-white;
+  @apply bg-bitcoin-400 text-white;
 }
 </style>

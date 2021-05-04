@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="bg-white overflow-hidden rounded-lg px-4 py-2">
-      <h3 class="text-sm leading-6 font-medium text-gray-900">
+      <h3 class="text-sm leading-6 font-medium">
         <router-link :to="`/transactions/${transaction.txid}`" class="text-bitcoin-500 break-words">
           {{ transaction.txid }}
         </router-link>
@@ -33,7 +33,7 @@
               </router-link>
               <div v-else>Coinbase (Newly Generated Coins)</div>
             </dl>
-            <dd v-if="input.txid" class="col-span-1 text-sm font-medium text-right text-gray-900 sm:mt-0">
+            <dd v-if="input.txid" class="col-span-1 text-sm font-medium text-right sm:mt-0">
               {{ input.value }} BTC
             </dd>
           </div>
@@ -64,7 +64,7 @@
                 {{ output.scriptPubKey.asm }}
               </div>
             </dl>
-            <dd class="col-span-1 text-sm font-medium text-right text-gray-900 sm:mt-0">
+            <dd class="col-span-1 text-sm font-medium text-right sm:mt-0">
               {{ output.value }} BTC
             </dd>
           </div>

@@ -34,7 +34,7 @@ html {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
-  @apply bg-bitcoin-50;
+  @apply bg-bitcoin-50 text-bitcoin-900;
 }
 
 *,

@@ -31,7 +31,7 @@
           <dt class="text-sm font-medium text-gray-500">
             Fee
           </dt>
-          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <dd class="mt-1 text-sm sm:mt-0 sm:col-span-2">
             {{ transaction.coinbase ? 0 : transaction.fee }} BTC
           </dd>
         </div>
@@ -39,7 +39,7 @@
           <dt class="text-sm font-medium text-gray-500">
             Fee Rate
           </dt>
-          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <dd class="mt-1 text-sm sm:mt-0 sm:col-span-2">
             {{ transaction.coinbase ? 0 : (transaction.feeRate * 100000000).toFixed(2) }} sat/vB
             <!-- <span class="badge bg-green-100 text-green-800">Optimal</span> -->
           </dd>
@@ -48,7 +48,7 @@
           <dt class="text-sm font-medium text-gray-500">
             Size
           </dt>
-          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <dd class="mt-1 text-sm sm:mt-0 sm:col-span-2">
             {{ transaction.size }} B
           </dd>
         </div>
@@ -56,7 +56,7 @@
           <dt class="text-sm font-medium text-gray-500">
             Virtual size
           </dt>
-          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <dd class="mt-1 text-sm sm:mt-0 sm:col-span-2">
             {{ transaction.vsize }} vB
           </dd>
         </div>
@@ -64,7 +64,7 @@
           <dt class="text-sm font-medium text-gray-500">
             Weight
           </dt>
-          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <dd class="mt-1 text-sm sm:mt-0 sm:col-span-2">
             {{ transaction.weight }} WU
           </dd>
         </div>
@@ -72,7 +72,7 @@
           <dt class="text-sm font-medium text-gray-500">
             Features
           </dt>
-          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <dd class="mt-1 text-sm sm:mt-0 sm:col-span-2">
             <span class="badge bg-yellow-100 text-yellow-800">SegWit</span>
             <span class="badge bg-red-100 text-red-800">RBF</span>
           </dd>

@@ -14,7 +14,7 @@
           <dt class="text-sm font-medium text-gray-500">
             Hash
           </dt>
-          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <dd class="mt-1 text-sm sm:mt-0 sm:col-span-2">
             {{ blockStats.blockhash }}
           </dd>
         </div>
@@ -22,7 +22,7 @@
           <dt class="text-sm font-medium text-gray-500">
             Total fees
           </dt>
-          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <dd class="mt-1 text-sm sm:mt-0 sm:col-span-2">
             {{ (blockStats.totalfee / 1000000000).toFixed(4) }} BTC
           </dd>
         </div>
@@ -30,7 +30,7 @@
           <dt class="text-sm font-medium text-gray-500">
             Subsidy
           </dt>
-          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <dd class="mt-1 text-sm sm:mt-0 sm:col-span-2">
             {{ ((blockStats.subsidy) / 1000000000).toFixed(4) }} BTC
           </dd>
         </div>
@@ -38,7 +38,7 @@
           <dt class="text-sm font-medium text-gray-500">
             Subsidy + fees
           </dt>
-          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <dd class="mt-1 text-sm sm:mt-0 sm:col-span-2">
             {{ ((blockStats.totalfee + blockStats.subsidy) / 1000000000).toFixed(4) }} BTC
           </dd>
         </div>
@@ -46,7 +46,7 @@
           <dt class="text-sm font-medium text-gray-500">
             Size
           </dt>
-          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <dd class="mt-1 text-sm sm:mt-0 sm:col-span-2">
             {{ fileSize(blockStats.total_size) }}
           </dd>
         </div>
@@ -54,7 +54,7 @@
           <dt class="text-sm font-medium text-gray-500">
             Weight
           </dt>
-          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <dd class="mt-1 text-sm sm:mt-0 sm:col-span-2">
             {{ (blockStats.total_weight / 1000000).toFixed(2) }} MWU
           </dd>
         </div>
