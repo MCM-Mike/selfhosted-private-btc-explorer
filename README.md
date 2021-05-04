@@ -28,10 +28,14 @@ UPDATE_INTERVAL_MS=10000
 MAX_BLOCK_RANGE=20
 ```
 3. Change the .env variables to your own Bitcoind/Electrum config.
-4. While in the backend folder, run the following command: ```npm run build```.
+4. While in the backend folder, run the following command: ```npm i```.
 
 ### Running the backend
 1. To run the backend, run the following command: ```npm run start```.
+
+### Testing the backend
+Backend tests are made using the Mocha testing framework.
+1. To run the tests, while in the backend directory, run the command ```npm test```.
 
 ### Setting up the frontend
 1. Change to the frontend directory and create a new ".env" file with the following content:
@@ -39,11 +43,8 @@ MAX_BLOCK_RANGE=20
 VUE_APP_SOCKET_URL=http://localhost:3001
 ```
 2. Point the VUE_APP_SOCKET_URL to your backend. By default, it is on localhost port 3001.
-3. Run ```npm run build```.
-
-### Testing the backend
-Backend tests are made using the Mocha testing framework.
-1. To run the tests, while in the backend directory, run the command ```npm test```.
+3. Run ```npm i```.
+4. Run ```npm run build```.
 
 ### Running the frontend
 The frontend is a static page located in the /dist folder in the frontend directory after running the npm run build command. There are multiple ways of serving a static webpage, like using NGINX.

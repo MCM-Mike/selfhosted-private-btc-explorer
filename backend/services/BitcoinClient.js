@@ -12,8 +12,8 @@ const UPDATE_INTERVAL_MS = process.env.UPDATE_INTERVAL_MS || 10000
 const MAX_BLOCK_RANGE = process.env.MAX_BLOCK_RANGE || 20
 
 class BitcoinClient {
-  electrumClient
-  updateInterval
+  electrumClient = null
+  updateInterval = null
   cache = {
     blockCount: 0, // block count of the node
     latestBlocks: [], // 20 latest blocks
