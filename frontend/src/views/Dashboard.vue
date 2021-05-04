@@ -54,10 +54,10 @@
 
       <div class="px-4 py-5 bg-white rounded-lg overflow-hidden sm:p-6">
         <dt class="text-sm font-medium truncate">
-          Smart Fee ({{ network.smartFee.blocks }} Blocks)
+          Smart Fee ({{ network.smartFee ? network.smartFee.blocks : 0 }} Blocks)
         </dt>
         <dd class="mt-1 text-3xl font-semibold text-bitcoin-500">
-          {{ network.smartFee.feerate ? (network.smartFee.feerate * 100000).toFixed(2) : 0 }} sat/Byte
+          {{ network.smartFee ? (network.smartFee.feerate * 100000).toFixed(2) : 0 }} sat/Byte
         </dd>
       </div>
     </div>
