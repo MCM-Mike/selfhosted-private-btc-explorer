@@ -22,6 +22,10 @@ ELECTRUM_RPC_USER=
 ELECTRUM_RPC_PASSWORD=
 ELECTRUM_RPC_HOST=
 ELECTRUM_RPC_PORT=50001
+
+# do not change the settings below unless you know what you're doing
+UPDATE_INTERVAL_MS=10000
+MAX_BLOCK_RANGE=20
 ```
 3. Change the .env variables to your own Bitcoind/Electrum config.
 4. While in the backend folder, run the following command: ```npm run build```.
@@ -48,7 +52,14 @@ The frontend is a static page located in the /dist folder in the frontend direct
 
 ## Screenshots
 
-Pre-final version
+![Screenshot Dashboard](https://i.ibb.co/W31BrfX/Screenshot-2021-05-04-at-20-21-08.png "Screenshot Dashboard")
+![Screenshot Dashboard 2](https://i.ibb.co/4M6zN00/Screenshot-2021-05-04-at-20-21-28.png "Screenshot Dashboard 2")
+![Screenshot Blocks](https://i.ibb.co/0YQQv5Y/Screenshot-2021-05-04-at-20-21-37.png "Screenshot Blocks")
+![Screenshot Blocks 2](https://i.ibb.co/p0CV2N0/Screenshot-2021-05-04-at-20-21-44.png "Screenshot Blocks 2")
+![Screenshot Block](https://i.ibb.co/M6YYK07/Screenshot-2021-05-04-at-20-22-11.png "Screenshot Block")
+![Screenshot Block 2](https://i.ibb.co/ZgYV2f6/Screenshot-2021-05-04-at-20-22-20.png "Screenshot Block 2")
+![Screenshot Transaction](https://i.ibb.co/JH474z4/Screenshot-2021-05-04-at-20-22-37.png "Screenshot Transaction")
+![Screenshot Address](https://i.ibb.co/Vx9nzw3/Screenshot-2021-05-04-at-20-22-47.png "Screenshot Address")
 
 ## Future ideas
 1. Show sent/received in address view.
