@@ -4,16 +4,10 @@
     <AverageFees />
     -->
 
-    <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3">
-      <div class="bg-white overflow-hidden rounded-lg col-span-1">
-        <div class="px-4 py-5 sm:p-6">
-          <h4>Incoming transaction chart</h4>
-        </div>
-      </div>
-      <div class="bg-white overflow-hidden rounded-lg col-span-1">
-        <div class="px-4 py-5 sm:p-6">
-          <Mempool />
-        </div>
+    <div class="mt-3 grid grid-cols-1 md:grid-cols-1 gap-3">
+      <div class="px-6 py-4 bg-white rounded-lg overflow-hidden">
+        <h2 class="text-lg font-medium text-bitcoin-900 py-1">Mempool Transactions</h2>
+        <Mempool class="h-80" />
       </div>
     </div>
 
@@ -29,7 +23,7 @@ import socket from '../plugins/socket.io'
 import BlockTimeline from '../components/LatestBlocks.vue'
 import AverageFees from '../components/AverageFees.vue'
 import LatestTransactions from '../components/LatestTransactions.vue'
-import Mempool from "@/components/charts/Mempool";
+import Mempool from "@/components/charts/MempoolTransactions";
 
 export default {
   // eslint-disable-next-line vue/no-unused-components

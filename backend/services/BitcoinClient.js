@@ -18,7 +18,8 @@ class BitcoinClient {
     blockCount: 0, // block count of the node
     latestBlocks: [], // 20 latest blocks
     latestTransactions: [],
-    mempool: []
+    mempool: [],
+    mempoolTransactionsChart: []
   }
 
   constructor() {
@@ -45,6 +46,8 @@ class BitcoinClient {
       this.cache.latestBlocks = latestBlocks
       this.cache.mempool = mempool
       this.cache.latestTransactions = latestTransactions
+      this.cache.mempoolTransactionsChart.push({ time: +Date.now(), tx_count: mempool.length })
+      this.cache.mempoolTransactionsChart = this.cache.mempoolTransactionsChart.slice(-8640)
 
       callback()
     } catch (error) {

@@ -13,12 +13,14 @@ function socketIo(io) {
     socket.on('getBlockOrTransaction', (hashOrIndex) => { getBlockOrTransaction(socket, hashOrIndex) })
     socket.on('getLatestTransactions', () => { getLatestTransactions(socket) })
     socket.on('getAddressInfo', (address) => { getAddressInfo(socket, address) })
+    socket.on('getMempoolTransactionsChart', () => { getMempoolTransactionsChart(socket) })
   })
 
   bitcoinClient.startCacheUpdater(function () {
     getBlockCount(io)
     getLatestBlocks(io)
     getLatestTransactions(io)
+    getMempoolTransactionsChart(io)
   })
 }
 
@@ -33,8 +35,13 @@ function getLatestBlocks(socket) {
 }
 
 async function getLatestBlocksOffset(socket, offset) {
-  const latestBlocks = await bitcoinClient.getLatestBlocksOffset(offset, 20);
+  const latestBlocks = await bitcoinClient.getLatestBlocksOffset(offset, 20)
   socket.emit('latestBlocksOffset', latestBlocks)
+}
+
+async function getMempoolTransactionsChart(socket) {
+  const mempoolTransactionsChart = bitcoinClient.cache.mempoolTransactionsChart
+  socket.emit('mempoolTransactionsChart', mempoolTransactionsChart)
 }
 
 async function getBlock(socket, hashOrIndex) {
