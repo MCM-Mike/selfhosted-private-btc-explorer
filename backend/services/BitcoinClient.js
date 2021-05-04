@@ -19,7 +19,12 @@ class BitcoinClient {
     latestBlocks: [], // 20 latest blocks
     latestTransactions: [],
     mempool: [],
-    mempoolTransactionsChart: []
+    mempoolTransactionsChart: [],
+    network: {
+      difficulty: 0,
+      smartFee: 0,
+      mempoolInfo: {}
+    }
   }
 
   constructor() {
@@ -41,6 +46,9 @@ class BitcoinClient {
       const latestBlocks = await this.getLatestBlocks()
       const mempool = await this.getRawMempool()
       const latestTransactions = await this.getLatestTransactions(mempool)
+      const difficulty = await this.getDifficulty()
+      const smartFee = await this.getSmartFee()
+      const mempoolInfo = await this.getMempoolInfo()
 
       this.cache.blockCount = blockCount
       this.cache.latestBlocks = latestBlocks
@@ -48,6 +56,9 @@ class BitcoinClient {
       this.cache.latestTransactions = latestTransactions
       this.cache.mempoolTransactionsChart.push({ time: +Date.now(), tx_count: mempool.length })
       this.cache.mempoolTransactionsChart = this.cache.mempoolTransactionsChart.slice(-8640)
+      this.cache.network.difficulty = difficulty
+      this.cache.network.smartFee = smartFee
+      this.cache.network.mempoolInfo = mempoolInfo
 
       callback()
     } catch (error) {
@@ -83,6 +94,15 @@ class BitcoinClient {
   // get mempool transaction
   async getMempoolEntry(txHash) {
     return await this.postRpcCommand('getmempoolentry', [txHash])
+  }
+
+  async getDifficulty() {
+    return await this.postRpcCommand('getdifficulty')
+  }
+
+  // estimate fee for conf in 1 block
+  async getSmartFee() {
+    return await this.postRpcCommand('estimatesmartfee', [1])
   }
 
   async getTransaction(txid) {
