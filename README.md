@@ -14,11 +14,13 @@ Frontend is done with Vue, while the backend is built on Node.js. Communication 
 ```dotenv
 WEB_SOCKET_PORT=3001
 
+# bitcoind (with `txindex=1`) 
 RPC_USER=
 RPC_PASSWORD=
 RPC_HOST=
 RPC_PORT=8332
 
+# ElectrumX
 ELECTRUM_RPC_USER=
 ELECTRUM_RPC_PASSWORD=
 ELECTRUM_RPC_HOST=
