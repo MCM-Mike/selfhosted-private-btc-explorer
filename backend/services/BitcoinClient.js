@@ -16,7 +16,7 @@ class BitcoinClient {
   updateInterval
   cache = {
     blockCount: 0, // block count of the node
-    latestBlocks: [], // 10 latest blocks
+    latestBlocks: [], // 20 latest blocks
     latestTransactions: [],
     mempool: []
   }
@@ -107,12 +107,14 @@ class BitcoinClient {
     return blocks
   }
 
-  // returns 10 latest blocks on the node
+  // returns 20 latest blocks on the node
   async getLatestBlocks() {
-    return this.getLatestBlocksOffset(0, 10)
+    return this.getLatestBlocksOffset(0, 20, true)
   }
 
-  async getLatestBlocksOffset(offset, numBlocks) {
+  async getLatestBlocksOffset(offset, numBlocks, force) {
+    if (!force && offset === 0) return this.cache.latestBlocks
+
     const latestBlock = await this.getBlockCount()
 
     if (latestBlock < 1) return

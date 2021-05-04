@@ -28,7 +28,7 @@ function getBlockCount(socket) {
 }
 
 function getLatestBlocks(socket) {
-  const latestBlocks = bitcoinClient.cache.latestBlocks
+  const latestBlocks = bitcoinClient.cache.latestBlocks.slice(0, 10)
   socket.emit('latestBlocks', latestBlocks)
 }
 
