@@ -76,4 +76,5 @@ The frontend is a static page located in the /dist folder in the frontend direct
 
 ## SUPPORT
 For support, contact: mick@dutchbits.nl
+or open an issue
 
