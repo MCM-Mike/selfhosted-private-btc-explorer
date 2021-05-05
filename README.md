@@ -1,6 +1,9 @@
 # Bitcoin Blockchain Explorer
 Frontend is done with Vue, while the backend is built on Node.js. Communication between Frontend and Backend goes via sockets (Socket.IO). Thus the data displayed on the frontend is (very close to) real-time.
 
+This project aims to use *only* self-hosted components and required no external public API-calls. 
+It is based on `bitcoind` and `ElectrumX` (https://electrumx.readthedocs.io/en/latest/).
+
 ## Installation
 
 ### Prerequisites
