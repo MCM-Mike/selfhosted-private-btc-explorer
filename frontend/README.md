@@ -1,4 +1,4 @@
-# btc-explorer-mike
+# Bitcoin Blockchain Explorer
 
 ## Project setup
 ```
